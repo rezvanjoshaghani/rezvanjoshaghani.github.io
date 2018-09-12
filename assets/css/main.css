@@ -2219,7 +2219,10 @@ input, select, textarea {
 				#top .image {
 					margin: 0 auto 2em auto;
 				}
-
+			h1 {
+				font-size: 3.25em;
+				line-height: 3.25em;
+			}
 	}
 
 /* Small */

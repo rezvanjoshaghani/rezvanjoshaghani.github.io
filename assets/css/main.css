@@ -2221,7 +2221,8 @@ input, select, textarea {
 				}
 			h1 {
 				font-size: 3.25em;
-				line-height: 3.25em;
+				line-height: 1.25em;
+				padding-top:50px;
 			}
 	}
 

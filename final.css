@@ -1,0 +1,84 @@
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    margin: 0px;
+    overflow: hidden;
+    background-color: seashell ;
+}
+
+
+.axis text {
+    font-weight: bold;
+}
+
+.y-axis text {
+
+    text-anchor: end;
+}
+
+.axis-label{
+
+    font-size: 120%;
+    text-anchor: end;
+
+}
+
+
+.main{
+    width: 100%;
+    display: table;
+}
+
+.time{
+    display: table-cell;
+}
+
+.legend{
+    display: table-cell;
+}
+.pie{
+    display: table-cell;
+}
+
+
+.links:hover {
+    stroke: crimson;
+}
+
+
+.axis path {
+    display: none;
+}
+
+.axis line {
+    stroke-opacity: 0.3;
+}
+
+
+
+.nodes circle {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+text {
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+
+
+svg {
+    width: 100%;
+    height: 100%;
+}
+
+path.slice{
+    stroke-width:2px;
+}
+
+polyline{
+    opacity: .3;
+    stroke: black;
+    stroke-width: 2px;
+    fill: none;
+}

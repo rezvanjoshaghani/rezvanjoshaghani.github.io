@@ -1,7 +1,5 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    margin: 0px;
-    overflow: hidden;
     background-color: seashell ;
 }
 
@@ -40,10 +38,6 @@ body {
 }
 
 
-.links:hover {
-    stroke: crimson;
-}
-
 
 .axis path {
     display: none;
@@ -53,7 +47,7 @@ body {
     stroke-opacity: 0.3;
 }
 
-
+.link { stroke: #999; stroke-opacity: 0.4; stroke-width: 1px; }
 
 .nodes circle {
     stroke: #fff;
@@ -62,7 +56,7 @@ body {
 
 text {
     font-family: sans-serif;
-    font-size: 10px;
+    font-size: 13px;
 }
 
 
@@ -82,3 +76,19 @@ polyline{
     stroke-width: 2px;
     fill: none;
 }
+
+.pie {
+    margin: 20px;
+}
+
+svg {
+    float: left;
+}
+
+.legend {
+    float: left;
+    font-family: "Verdana";
+    font-size: .7em;
+}
+
+

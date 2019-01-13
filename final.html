@@ -1,35 +1,39 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN" >
 <html>
 <head>
-    <title>Making a Bar Chart</title>
+    <title>Enron</title>
     <link rel="stylesheet" href="final.css">
     <script src="d3.js"></script>
-    <script src="topojson.js"></script>
+    <script src="http://d3js.org/d3-selection-multi.v1.js"></script>
 </head>
 <body>
-<div class="main">
-    <div class="legend" id="lg"></div>
-    <div class="time" id="ts"></div>
-    <div class="pie" id="p"></div>
-</div>
-
+<h2 align="center"> The Interpersonal Emails sent between Enron Employees </h2>
 <div class="control" id="cl">
     <button class="reset-select-button">Reset Select</button>
     <button class="reset-zoom-button">Reset Zoom</button>
 </div>
+
+<div class="main">
+    <div class="legend" id="lg"></div>
+    <div class="time" id="ts"></div>
+    <div class="pie" id="p">
+    </div>
+</div>
+
+
 
 <div class="root">
     <div class="network" id="net"></div>
 </div>
 
 <script>
-    document.getElementById('lg').style.width= (document.documentElement.clientWidth-50)*0.3 ;
-    document.getElementById('ts').style.height= document.documentElement.clientHeight*0.3;
-    document.getElementById('ts').style.width= (document.documentElement.clientWidth-50)*0.4;
+    document.getElementById('lg').style.width= (document.documentElement.clientWidth-50)*0.15 ;
+    document.getElementById('ts').style.height= document.documentElement.clientHeight*0.35;
+    document.getElementById('ts').style.width= (document.documentElement.clientWidth-50)*0.75;
     document.getElementById('p').style.width= (document.documentElement.clientWidth-50)*0.3 ;
 
     document.getElementById('net').style.width= (document.documentElement.clientWidth-50);
-    document.getElementById('net').style.height= document.documentElement.clientHeight*0.7;
+    document.getElementById('net').style.height= document.documentElement.clientHeight*0.65;
 </script>
 
 <script src="final.js"></script>

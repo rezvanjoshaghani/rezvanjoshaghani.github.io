@@ -1,11 +1,11 @@
 
 const tw =  document.getElementById("ts").offsetWidth;
 const th = document.getElementById("ts").offsetHeight;
-console.log(th)
+
 var inc=false;
 
-var user="rezvanjosh";
-var key="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OnJlenZhbmpvc2giLCJpc3MiOiJhZ2VudDpyZXp2YW5qb3NoOjoyNjU4ZGIzMi02NDk0LTRiZjYtYjViNC1jYzYyODNkMDg3MDMiLCJpYXQiOjE1NDQxMzExMTgsInJvbGUiOlsidXNlcl9hcGlfYWRtaW4iLCJ1c2VyX2FwaV9yZWFkIiwidXNlcl9hcGlfd3JpdGUiXSwiZ2VuZXJhbC1wdXJwb3NlIjp0cnVlfQ.ZuQii5LYJtBJHxC8BZ1j3JY2rwockRBfOIGtXljGkb4coKHPUrf_EAlcqZdQVtDhzLakKFqH0Na5Aq2ucI4Qrg"
+var user="arasils";
+var key="eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJwcm9kLXVzZXItY2xpZW50OmFyYXNpbHMiLCJpc3MiOiJhZ2VudDphcmFzaWxzOjpkNDYzOTBlNC1kNTQzLTRkZWEtYTk3Ny05YTM4ZjgzNmE1NTMiLCJpYXQiOjE1NDQxMzAzODYsInJvbGUiOlsidXNlcl9hcGlfcmVhZCIsInVzZXJfYXBpX3dyaXRlIl0sImdlbmVyYWwtcHVycG9zZSI6dHJ1ZX0.rTnFxgnqChS2xL4BY3SU90P4KFKpe6mOrcGa9FVdxk8gNzwoJNH5wGHfjRoB4tZ_iauhKP11mKiM_iDICW0Bbg"
 queryTime("SELECT SUBSTRING(message.date, 1, 10) as daty,COUNT(mid) from message where message.date > '2000-01-01'" +
     "       AND message.date <= '2003-01-01'  group by daty ORDER BY date ASC")
 
@@ -28,13 +28,13 @@ var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
     .force('charge', d3.forceManyBody()
         .strength(-300)
-        .theta(1)
+        // .theta(1)
         .distanceMax(heightN)
     )
     .force("center", d3.forceCenter(widthN / 2, heightN / 2))
     .force('collision', d3.forceCollide().radius(function(d) {
         return d.radius
-    }));
+    })).alphaTarget(0.3);
 
 var colorNodes= d3.scaleOrdinal().range(d3.schemePaired );
 var opacityScale= d3.scaleLinear().range([0,0.3]);
@@ -52,77 +52,102 @@ d3.select('.reset-zoom-button').on('click', () => {
 });
 
 
-var svgPie = d3.select(".pie")
-    .append("svg")
-    .append("g")
+svgNet.append('defs').append('marker')
+    .attrs({'id':'arrowhead',
+        'viewBox':'-0 -5 10 10',
+        'refX':13,
+        'refY':0,
+        'orient':'auto',
+        'markerWidth':13,
+        'markerHeight':13,
+        'xoverflow':'visible'})
+    .append('svg:path')
+    .attr('d', 'M 0,-5 L 10 ,0 L 0,5')
+    .attr('fill', '#999')
+    .style('stroke','none');
 
-svgPie.append("g")
-    .attr("class", "slices");
-svgPie.append("g")
-    .attr("class", "labels");
-svgPie.append("g")
-    .attr("class", "lines");
 
-var widthP = document.getElementById("p").offsetWidth,
+
+var widthP = document.getElementById("p").offsetWidth - marginNet.right -marginNet.left,
     heightP = th,
-    radius = Math.min(widthP, heightP) / 2;
+    // Think back to 5th grade. Radius is 1/2 of the diameter. What is the limiting factor on the diameter? Width or height, whichever is smaller
+    radiusP = Math.min(widthP, heightP) / 2;
 
-var pie = d3.pie()
-    .sort(null)
-    .value(function(d) {
-        return d.value;
-    });
+var colorP = d3.scaleOrdinal()
+    .range(["#2C93E8","#838690","#F56C4E"]);
 
 var arc = d3.arc()
-    .outerRadius(radius * 0.8)
-    .innerRadius(radius * 0.4);
+    .outerRadius(radiusP - 10)
+    .innerRadius(0);
 
-var outerArc = d3.arc()
-    .innerRadius(radius * 0.9)
-    .outerRadius(radius * 0.9);
+var labelArc = d3.arc()
+    .outerRadius(radiusP - 40)
+    .innerRadius(radiusP - 40);
 
-svgPie.attr("transform", "translate(" + widthP / 2 + "," + heightP / 2 + ")");
+var svgP = d3.select(".pie")
+    .append("svg")
+    .attr("width", widthP)
+    .attr("height", heightP)
+    .append("g")
+    .attr("transform", "translate(" + widthP/2 + "," + heightP/2 +")"); // Moving the center point. 1/2 the width and 1/2 the height
 
-var key = function(d){ return d.data.label; };
 
-var color = d3.scaleOrdinal()
-    .domain(["Location", "None", "Finance", "Health", "Personal Information"])
-    .range(["#98abc5", "#8a89a6", "#7b6888", "#6b486b", "#a05d56"]);
 
 
 queryPos("SELECT nods.`group` FROM nods Group By nods.`group`");
 
-d3.select('.reset-select-button').on('click', () => {
-    console.log("hi");
-    fade(1);
-});
+
 
 
 function run(links,nodes) {
 
+
+
     d3.select('.reset-select-button').on('click', () => {
-        console.log("hi");
         node.style("stroke-opacity", 1);
         node.style("fill-opacity", 1);
         link.style("stroke-opacity", 1);
         label.style("opacity",1);
+        link.attr('marker-end', 'url(#arrowhead)');
     });
 
-    widthScale.domain(d3.map(links, d => d.value).keys());
     opacityScale.domain(d3.map(links, d => d.value).keys());
 
-    var link = g.append("g")
-        .attr("class", "links")
-        .style("stroke", "#aaa")
-        .selectAll("line")
+
+    //undirected Graph
+    // var link = g.append("g")
+    //     .attr("class", "links")
+    //     .style("stroke", "#aaa")
+    //     .selectAll("line")
+    //     .data(links)
+    //     .enter().append("line")
+    //     .on("mouseover", function (d){
+    //         d3.select(this).style("stroke","red" );
+    //     })
+    //     .on("mouseout", function (d){
+    //         d3.select(this).style("stroke","#aaa" );
+    //     })
+
+
+    var link = g.selectAll(".link")
         .data(links)
-        .enter().append("line")
+        .enter()
+        .append("line")
+        .attr("class", "link")
+        .attr('marker-end','url(#arrowhead)')
         .on("mouseover", function (d){
             d3.select(this).style("stroke","red" );
         })
         .on("mouseout", function (d){
             d3.select(this).style("stroke","#aaa" );
         })
+        .on("click", function (d){
+           console.log("d");
+            var heha = [{"name":"Location","count":Math.floor(Math.random() * 100)},{"name":"Finance","count":Math.floor(Math.random() * 100)},{"name":"Health","count":Math.floor(Math.random() * 100)}];
+            drawPieChart(heha);
+
+        })
+
 
     var linkedByIndex = {};
     links.forEach(function(d) {
@@ -153,8 +178,11 @@ function run(links,nodes) {
         .nodes(nodes)
         .on("tick", ticked);
 
+
+
     simulation.force("link")
         .links(links);
+
 //
 // .strength(function (d) {
 //         console.log("thid is d"+d)
@@ -163,16 +191,20 @@ function run(links,nodes) {
 
     function ticked() {
 
+        //alert();
         opacityScale= d3.scaleLinear()
 
-        var r=6;
+        var r=10;
 
-
+        simulation.alphaTarget(0.3).restart()
 
         node
             .attr("r", r)
-            .attr("cx", function (d) { return d.x = Math.max(r, Math.min(widthN - r, d.x)); })
-            .attr("cy", function(d) { return d.y = Math.max(r, Math.min(heightN - r, d.y)); })
+            .attr("cx", function (d) {
+                d.x = Math.max(r, Math.min(widthN - r, d.x));
+                return d.x; })
+            .attr("cy", function(d) {
+                return d.y = Math.max(r, Math.min(heightN - r, d.y)); })
             .style("fill", d=> colorNodes(d.group))
             .style("stroke", "#424242")
             .style("stroke-width", "1px")
@@ -183,7 +215,24 @@ function run(links,nodes) {
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; })
-            .on("click", DrawChart());
+            //.on("click", DrawChart());
+
+        // edgepaths.attr('d', function (d) {
+        //     return 'M ' + d.source.x + ' ' + d.source.y + ' L ' + d.target.x + ' ' + d.target.y;
+        // });
+
+        simulation.alphaTarget(0.3).restart()
+        // link.attr("d", function(d) {
+        //     var dx = d.target.x - d.source.x,
+        //         dy = d.target.y - d.source.y,
+        //         dr = Math.sqrt(dx * dx + dy * dy);
+        //     return "M" +
+        //         d.source.x + "," +
+        //         d.source.y + "A" +
+        //         dr + "," + dr + " 0 0,1 " +
+        //         d.target.x + "," +
+        //         d.target.y;
+        // });
 
         label
             .attr("x", function(d) { return d.x; })
@@ -210,17 +259,20 @@ function run(links,nodes) {
                 return o.source.id == d.id || o.target.id == d.id ? 1 : opacity;
             });
 
+            console
+            link.attr('marker-end',function(o) {
+                return o.source.id == d.id || o.target.id == d.id  ? 'url(#arrowhead)' : 'null';
+            });
+
             label.style("opacity",function(o) {
                 return isConnected(d, o) ? 1 : opacity;
             });
+            console.log(opacity);
+
         };
     }
 
-    function showMessages() {
-        //g.selectAll("*").style("opacity", 0);
-    }
 
-    // check the dictionary to see if nodes are linked
     function isConnected(a, b) {
         return linkedByIndex[a.id+ "," + b.id] || linkedByIndex[b.id + "," + a.id] || a.id == b.id;
     }
@@ -228,6 +280,7 @@ function run(links,nodes) {
 
 function dragstarted(d) {
     if (!d3.event.active) {
+
         simulation.alphaTarget(0.3).restart()
     }
     d.fx = d.x
@@ -248,7 +301,7 @@ function dragended(d) {
 
 function drawTimeline(data)
 {
-    var margin = {top: 20, right: 20, bottom: 30, left: 50},
+    var margin = {top: 20, right: 20, bottom: 50, left: 70},
         width = tw - margin.left - margin.right,
         height = th - margin.top - margin.bottom;
 
@@ -284,6 +337,23 @@ function drawTimeline(data)
         // Add the Y Axis
         svg.append("g")
             .call(d3.axisLeft(y));
+
+    // text label for the x axis
+        svg.append("text")
+            .attr("transform",
+                "translate(" + (width/2) + " ," +
+                (height + margin.top + 20) + ")")
+            .style("text-anchor", "middle")
+            .text("Date");
+
+        // text label for the y axis
+        svg.append("text")
+            .attr("transform", "rotate(-90)")
+            .attr("y", 0 - margin.left)
+            .attr("x",0 - (height / 2))
+            .attr("dy", "1em")
+            .style("text-anchor", "middle")
+            .text("Number Of the Emails");
 
 
     /*
@@ -326,7 +396,6 @@ function drawTimeline(data)
 
         var sd = toDateFormat(range[0]) ;
         var ed = toDateFormat(range[1]) ;
-        console.log(sd+"  "+ed);
 
         queryGraphInTime(sd,ed);
 
@@ -349,11 +418,48 @@ function drawTimeline(data)
             }
             return yyyy+'-'+mm+'-'+dd
         }
+        svgP.selectAll("*").remove();
     }
 
 
 }
 
+function drawPieChart(data) {
+
+
+    var sum=0;
+    data.forEach((i) =>{
+        sum=sum+i.count;
+    });
+
+    svgP.selectAll("*").remove();
+
+    svgP.append("text")
+        .attr("transform",
+            "translate(" + 0 + " ," +
+            (-heightP/2+10) + ")")
+        .style("text-anchor", "middle")
+        .text("Percentage of disclosure entities in the messages");
+
+    var pie = d3.pie()
+        .value(function(d) { return d.count; })(data);
+
+    var g = svgP.selectAll("arc")
+        .data(pie)
+        .enter().append("g")
+        .attr("class", "arc");
+
+    g.append("path")
+        .attr("d", arc)
+        .style("fill", function(d) { return colorP(d.data.name);});
+
+    g.append("text")
+        .attr("class","pie-text")
+        .attr("transform", function(d) { return "translate(" + labelArc.centroid(d)+ 40 + ")"; })
+        .text(function(d) { return d.data.name+"("+((d.data.count/sum)*100).toFixed(2)+"%)";})
+        .style("fill", "#000000");
+
+}
 
 function drawLegend(data)
 {
@@ -464,7 +570,6 @@ function queryGraphInTime(sd,ed)
         " WHERE message.date > '"+sd+"' " +
         "       AND message.date <= '"+ed+"' " +
         " GROUP BY firstname, lastname, `group`"
-    console.log(q);
     var xhr = new XMLHttpRequest();
     var url = "https://api.data.world/v0/sql/"+user+"/api-sandbox";
     xhr.open("POST", url, true);
@@ -507,119 +612,13 @@ function queryLinksTimed(nd,sd,ed)
     xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
             var json = JSON.parse(xhr.responseText);
-            console.log(json);
             g.selectAll("*").remove();
+
+            //ticked();
             run(json,nd);
         }
     };
 }
 
 
-function DrawChart()
-{
-    function randomData (){
-        var labels = ["Location", "None", "Finance", "Health", "Personal Information"];
-        return labels.map(function(label){
-            return { label: label, value: Math.random() }
-        });
-    }
 
-    change(randomData());
-
-    // d3.select(".randomize")
-    //     .on("click", function(){
-    //         change(randomData());
-    //     });
-
-
-    function change(data) {
-
-        /* ------- PIE SLICES -------*/
-        var slice = svgPie.select(".slices").selectAll("path.slice")
-            .data(pie(data), key);
-
-        slice.enter()
-            .insert("path")
-            .style("fill", function(d) { return color(d.data.label); })
-            .attr("class", "slice");
-
-        slice
-            .transition().duration(1000)
-            .attrTween("d", function(d) {
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    return arc(interpolate(t));
-                };
-            })
-
-        slice.exit()
-            .remove();
-
-        /* ------- TEXT LABELS -------*/
-
-        var text = svg.select(".labels").selectAll("text")
-            .data(pie(data), key);
-
-        text.enter()
-            .append("text")
-            .attr("dy", ".35em")
-            .text(function(d) {
-                return d.data.label;
-            });
-
-        function midAngle(d){
-            return d.startAngle + (d.endAngle - d.startAngle)/2;
-        }
-
-        text.transition().duration(1000)
-            .attrTween("transform", function(d) {
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    var d2 = interpolate(t);
-                    var pos = outerArc.centroid(d2);
-                    pos[0] = radius * (midAngle(d2) < Math.PI ? 1 : -1);
-                    return "translate("+ pos +")";
-                };
-            })
-            .styleTween("text-anchor", function(d){
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    var d2 = interpolate(t);
-                    return midAngle(d2) < Math.PI ? "start":"end";
-                };
-            });
-
-        text.exit()
-            .remove();
-
-        /* ------- SLICE TO TEXT POLYLINES -------*/
-
-        var polyline = svgPie.select(".lines").selectAll("polyline")
-            .data(pie(data), key);
-
-        polyline.enter()
-            .append("polyline");
-
-        polyline.transition().duration(1000)
-            .attrTween("points", function(d){
-                this._current = this._current || d;
-                var interpolate = d3.interpolate(this._current, d);
-                this._current = interpolate(0);
-                return function(t) {
-                    var d2 = interpolate(t);
-                    var pos = outerArc.centroid(d2);
-                    pos[0] = radius * 0.95 * (midAngle(d2) < Math.PI ? 1 : -1);
-                    return [arc.centroid(d2), outerArc.centroid(d2), pos];
-                };
-            });
-
-        polyline.exit()
-            .remove();
-    };
-}

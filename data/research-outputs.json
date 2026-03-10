@@ -1,0 +1,56 @@
+{
+  "publications": [
+    {
+      "title": "Interactive Light Field Visualization for Immersive Environments",
+      "authors": "Rezvan Joshaghani et al.",
+      "venue": "Ongoing PhD research",
+      "year": "2024",
+      "url": "https://scholar.google.com/citations?user=iUqaBXIAAAAJ&hl=en"
+    },
+    {
+      "title": "Practical Neural Scene Rendering for Real-Time Exploration",
+      "authors": "Rezvan Joshaghani et al.",
+      "venue": "Ongoing PhD research",
+      "year": "2024",
+      "url": "https://scholar.google.com/citations?user=iUqaBXIAAAAJ&hl=en"
+    }
+  ],
+  "code": [
+    {
+      "title": "Light Field Viewer",
+      "description": "OpenGL-based light field renderer and viewer.",
+      "url": "https://github.com/rezvanjoshaghani/lightfieldRenderer"
+    },
+    {
+      "title": "Parallax Barrier Generator",
+      "description": "Utility for generating parallax barrier patterns for multi-view displays.",
+      "url": "https://github.com/rezvanjoshaghani/Parallax-Barrier-Generator"
+    }
+  ],
+  "slides": [
+    {
+      "title": "Research Overview Slides",
+      "description": "Talk deck summarizing current dissertation directions.",
+      "url": "https://drive.google.com/file/d/19S-MADzqtMB-CeiwgHlnK1DrWe7uI3zH/view?usp=sharing"
+    }
+  ],
+  "demos": [
+    {
+      "title": "Simple Terrain Demo",
+      "description": "Interactive WebGL terrain visualization.",
+      "url": "terrain/simpleTerrain.html"
+    },
+    {
+      "title": "AR Art Demo",
+      "description": "Marker-based AR artwork experiment.",
+      "url": "ar-art/mytest.html"
+    }
+  ],
+  "datasets": [
+    {
+      "title": "Project Artifacts and Supplementary Data",
+      "description": "Curated links to datasets and supplementary materials as they are released.",
+      "url": "https://github.com/rezvanjoshaghani"
+    }
+  ]
+}

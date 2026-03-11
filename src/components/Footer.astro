@@ -1,0 +1,57 @@
+---
+const footerLinks = [
+  { label: 'Scholar', color: '#00F0FF', href: 'https://scholar.google.com/citations?user=iUqaBXIAAAAJ&hl=en' },
+  { label: 'GitHub', color: '#FF3CAC', href: 'https://github.com/rezvanjoshaghani' },
+  { label: 'LinkedIn', color: '#22D65A', href: 'https://www.linkedin.com/in/rezvan-joshaghani' },
+  { label: 'Twitter', color: '#FFE03D', href: 'https://twitter.com/RezvanJosh' },
+];
+---
+<footer class="footer container">
+  <span class="footer-copy font-outfit">&copy; 2026 Rezvan Joshaghani</span>
+  <div class="footer-links">
+    {footerLinks.map(link => (
+      <a
+        href={link.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="footer-link font-outfit"
+        style={`--hover-color: ${link.color};`}
+      >
+        {link.label}
+      </a>
+    ))}
+  </div>
+</footer>
+
+<style>
+  .footer {
+    padding: 40px 32px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-copy {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .footer-links {
+    display: flex;
+    gap: 24px;
+  }
+
+  .footer-link {
+    font-size: 12px;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .footer-link:hover {
+    color: var(--hover-color);
+  }
+</style>

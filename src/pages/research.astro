@@ -1,0 +1,335 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NeonDot from '../components/NeonDot.astro';
+
+const catColors: Record<string, string> = {
+  'Neural Rendering': '#00F0FF',
+  'XR Education': '#22D65A',
+  'Privacy': '#845EF7',
+};
+
+const papers = [
+  {
+    title: 'Evaluating XR-Based Glove Hygiene Training for Introductory Chemistry Labs',
+    authors: 'R. Joshaghani, A. Winters, Y. Zong, S. Cutchin',
+    venue: 'IEEE VR 2026 / IEEE TVCG',
+    year: '2026',
+    cat: 'XR Education',
+    note: 'Three-arm RCT comparing VR, WebGL, and multimedia control. VR reduced anticipatory anxiety; null self-efficacy finding framed via Control-Value Theory and CAMIL.',
+    links: [
+      { label: 'Paper', url: '#' },
+      { label: 'Preprint', url: '#' },
+    ],
+  },
+  {
+    title: 'Triangle-DCT Compression for Triangle Splatting',
+    authors: 'R. Joshaghani, S. Cutchin',
+    venue: 'In preparation',
+    year: '2025',
+    cat: 'Neural Rendering',
+    note: 'DCT-based compression with clustering strategies. Energy-based coefficient selection outperforms low-frequency truncation.',
+    links: [],
+  },
+  {
+    title: 'Complexity-Aware Loss Optimization for 3D Gaussian Splatting',
+    authors: 'R. Joshaghani, S. Cutchin',
+    venue: 'Targeting SIGGRAPH 2026',
+    year: '2025',
+    cat: 'Neural Rendering',
+    note: 'Region-adaptive loss functions allocating capacity by scene complexity. 32-scene evaluation.',
+    links: [],
+  },
+  {
+    title: 'Formal Specification and Verification of User-Centric Privacy Policies for Ubiquitous Systems',
+    authors: 'R. Joshaghani, H. Mehrpouyan',
+    venue: 'IDEAS 2019, ACM',
+    year: '2019',
+    cat: 'Privacy',
+    note: 'Model-checking for purpose-based privacy policy enforcement using temporal logic.',
+    links: [{ label: 'Paper', url: '#' }],
+  },
+  {
+    title: 'A Model-Checking Approach for Enforcing Purpose-Based Privacy Policies',
+    authors: 'R. Joshaghani, H. Mehrpouyan',
+    venue: 'IEEE PAC 2017',
+    year: '2017',
+    cat: 'Privacy',
+    note: '',
+    links: [{ label: 'Paper', url: '#' }],
+  },
+];
+
+const categories = ['All', 'Neural Rendering', 'XR Education', 'Privacy'];
+---
+<BaseLayout
+  title="Research — Rezvan Joshaghani"
+  description="Selected publications and work in progress in neural rendering, 3DGS compression, XR education, and privacy."
+  currentPage="Research"
+>
+  <div class="page-content fade-in">
+    <h1 class="page-title font-outfit">Research</h1>
+    <p class="page-subtitle font-crimson">
+      Selected publications and work in progress.
+      <a
+        href="https://scholar.google.com/citations?user=iUqaBXIAAAAJ&hl=en"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="scholar-link"
+      >Google Scholar</a> has the full list.
+    </p>
+
+    <!-- Filter pills -->
+    <div class="filter-pills" id="filter-pills">
+      {categories.map(cat => {
+        const col = cat === 'All' ? '#00F0FF' : catColors[cat] || '#00F0FF';
+        return (
+          <button
+            class="filter-pill font-outfit"
+            data-category={cat}
+            data-color={col}
+          >
+            {cat}
+          </button>
+        );
+      })}
+    </div>
+
+    <!-- Paper list -->
+    <div id="paper-list">
+      {papers.map((p, i) => {
+        const dotColor = catColors[p.cat] || '#00F0FF';
+        return (
+          <div
+            class="paper-entry hover-row"
+            data-category={p.cat}
+          >
+            <div class="paper-inner">
+              <NeonDot color={dotColor} size={7} />
+              <div class="paper-content">
+                <div class="paper-header">
+                  <h3 class="paper-title font-crimson">{p.title}</h3>
+                  <span class="paper-year font-mono">{p.year}</span>
+                </div>
+                <div class="paper-authors font-outfit">{p.authors}</div>
+                <div class="paper-venue font-mono" style={`color: ${dotColor};`}>{p.venue}</div>
+                {p.note && <p class="paper-note font-crimson">{p.note}</p>}
+                {p.links.length > 0 && (
+                  <div class="paper-links">
+                    {p.links.map(l => (
+                      <a
+                        href={l.url}
+                        class="paper-link font-outfit"
+                        style={`color: ${dotColor}; --link-color: ${dotColor};`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {l.label} &#x2197;
+                      </a>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            {i < papers.length - 1 && <div class="paper-divider"></div>}
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 15.5px;
+    color: var(--secondary);
+    line-height: 1.65;
+    margin-bottom: 28px;
+    max-width: 520px;
+  }
+
+  .scholar-link {
+    color: #00F0FF;
+    text-decoration: none;
+  }
+
+  .scholar-link:hover {
+    text-decoration: underline;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 32px;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    font-size: 12px;
+    padding: 6px 16px;
+    border-radius: 20px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+
+  .filter-pill.active {
+    /* Styles set via JS */
+  }
+
+  .paper-entry {
+    padding: 24px 20px;
+    margin: 0 -20px;
+    border-radius: 10px;
+    transition: background 0.2s;
+  }
+
+  .paper-entry.hidden {
+    display: none;
+  }
+
+  .paper-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  .paper-content {
+    flex: 1;
+  }
+
+  .paper-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .paper-title {
+    font-size: 16.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.45;
+  }
+
+  .paper-year {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .paper-authors {
+    font-size: 13px;
+    color: var(--secondary);
+    margin-bottom: 3px;
+  }
+
+  .paper-venue {
+    font-size: 12px;
+    margin-bottom: 8px;
+  }
+
+  .paper-note {
+    font-size: 13.5px;
+    color: var(--muted);
+    line-height: 1.65;
+    margin-bottom: 8px;
+  }
+
+  .paper-links {
+    display: flex;
+    gap: 12px;
+  }
+
+  .paper-link {
+    font-size: 12px;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .paper-link:hover {
+    border-bottom-color: var(--link-color);
+  }
+
+  .paper-divider {
+    border-bottom: 1px solid var(--border);
+    margin-top: 24px;
+    margin-left: 21px;
+  }
+
+  @media (max-width: 768px) {
+    .paper-header {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>
+
+<script>
+  function initResearchFilter() {
+    const pills = document.querySelectorAll('.filter-pill');
+    const papers = document.querySelectorAll('.paper-entry');
+    let activeFilter = 'All';
+
+    function setFilter(cat: string) {
+      activeFilter = cat;
+
+      pills.forEach(pill => {
+        const pillCat = pill.getAttribute('data-category') || '';
+        const color = pill.getAttribute('data-color') || '#00F0FF';
+        const isActive = pillCat === cat;
+
+        if (isActive) {
+          (pill as HTMLElement).style.background = `${color}18`;
+          (pill as HTMLElement).style.color = color;
+          (pill as HTMLElement).style.borderColor = `${color}40`;
+          pill.classList.add('active');
+        } else {
+          (pill as HTMLElement).style.background = 'transparent';
+          (pill as HTMLElement).style.color = '';
+          (pill as HTMLElement).style.borderColor = '';
+          pill.classList.remove('active');
+        }
+      });
+
+      papers.forEach(paper => {
+        const paperCat = paper.getAttribute('data-category') || '';
+        if (cat === 'All' || paperCat === cat) {
+          paper.classList.remove('hidden');
+        } else {
+          paper.classList.add('hidden');
+        }
+      });
+    }
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', () => {
+        const cat = pill.getAttribute('data-category') || 'All';
+        setFilter(cat);
+      });
+    });
+
+    // Initialize with "All" active
+    setFilter('All');
+  }
+
+  initResearchFilter();
+  document.addEventListener('astro:after-swap', initResearchFilter);
+</script>

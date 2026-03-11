@@ -1,0 +1,25 @@
+---
+interface Props {
+  color?: string;
+}
+const { color = '#00F0FF' } = Astro.props;
+---
+<span
+  class="neon-tag"
+  style={`color: ${color}; background: ${color}15; border-color: ${color}25;`}
+>
+  <slot />
+</span>
+
+<style>
+  .neon-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    padding: 3px 10px;
+    border-radius: 3px;
+    letter-spacing: 0.3px;
+    border: 1px solid;
+    display: inline-block;
+    white-space: nowrap;
+  }
+</style>

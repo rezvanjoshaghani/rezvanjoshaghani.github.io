@@ -1,0 +1,41 @@
+---
+import NeonDot from './NeonDot.astro';
+
+interface Props {
+  title: string;
+  venue: string;
+  dotColor: string;
+}
+
+const { title, venue, dotColor } = Astro.props;
+---
+<div class="pub-entry hover-row">
+  <NeonDot color={dotColor} />
+  <span class="pub-title font-crimson">{title}</span>
+  <span class="pub-venue font-mono">{venue}</span>
+</div>
+
+<style>
+  .pub-entry {
+    padding: 14px 16px;
+    margin: 0 -16px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    cursor: pointer;
+  }
+
+  .pub-title {
+    font-size: 15.5px;
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .pub-venue {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+</style>

@@ -1,0 +1,200 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CVEntry from '../components/CVEntry.astro';
+---
+<BaseLayout
+  title="CV — Rezvan Joshaghani"
+  description="Curriculum Vitae of Rezvan Joshaghani. Education, experience, publications, and technical skills."
+  currentPage="CV"
+>
+  <div class="page-content fade-in">
+    <div class="cv-header">
+      <h1 class="page-title font-outfit">Curriculum Vitae</h1>
+      <a
+        href="https://drive.google.com/file/d/19S-MADzqtMB-CeiwgHlnK1DrWe7uI3zH/view?usp=sharing"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="download-btn font-outfit"
+      >
+        Download PDF &darr;
+      </a>
+    </div>
+
+    <!-- Education -->
+    <section class="cv-section">
+      <h2 class="cv-section-title font-outfit">Education</h2>
+      <CVEntry
+        period="2021 – present"
+        title="Ph.D. Computer Science"
+        place="Boise State University"
+        detail="Advisor: Steve Cutchin. Neural rendering, 3DGS compression, XR education."
+        color="#00F0FF"
+      />
+      <CVEntry
+        period="2018 – 2021"
+        title="M.S. Computer Science"
+        place="Boise State University"
+        detail="Computer graphics and visualization"
+        color="#22D65A"
+      />
+      <CVEntry
+        period="2014 – 2018"
+        title="B.S. Software Engineering"
+        place="Boise State University"
+        color="#FFE03D"
+      />
+    </section>
+
+    <!-- Experience -->
+    <section class="cv-section">
+      <h2 class="cv-section-title font-outfit">Experience</h2>
+      <CVEntry
+        period="2023 – present"
+        title="Co-Founder"
+        place="Elevated"
+        detail="AI-powered scholarship matching and essay coaching platform"
+        color="#FF3CAC"
+      />
+      <CVEntry
+        period="2021 – present"
+        title="Graduate Research Assistant"
+        place="Boise State University"
+        detail="Neural rendering, 3DGS compression, XR-based STEM education"
+        color="#00F0FF"
+      />
+      <CVEntry
+        period="2018 – 2021"
+        title="Software Engineer"
+        place="Symantec (Broadcom)"
+        detail="Unified Reporting dashboard, enterprise security tooling"
+        color="#845EF7"
+      />
+    </section>
+
+    <!-- Awards -->
+    <section class="cv-section">
+      <h2 class="cv-section-title font-outfit">Awards & Fellowships</h2>
+      <CVEntry
+        period="2025"
+        title="Idaho Entrepreneurship Challenge"
+        place="Elevated"
+      />
+      <CVEntry
+        period="2024"
+        title="Story Collider Fellowship"
+        place="Boise State University"
+      />
+    </section>
+
+    <!-- Committee -->
+    <section class="cv-section">
+      <h2 class="cv-section-title font-outfit">Committee</h2>
+      <CVEntry
+        period="Advisor"
+        title="Dr. Steve Cutchin"
+        place="Computer Science, Boise State"
+      />
+      <CVEntry
+        period="Member"
+        title="Dr. Casey Kennington"
+        place="Computer Science, Boise State"
+      />
+      <CVEntry
+        period="Member"
+        title="Dr. Jerry Fails"
+        place="Computer Science, Boise State"
+      />
+    </section>
+
+    <!-- Technical -->
+    <section class="cv-section">
+      <h2 class="cv-section-title font-outfit">Technical</h2>
+      <div class="tech-row">
+        <span class="tech-label font-mono">Languages</span>
+        <span class="tech-value font-outfit">Python, C++, JavaScript, TypeScript, C#</span>
+      </div>
+      <div class="tech-row">
+        <span class="tech-label font-mono">Frameworks</span>
+        <span class="tech-value font-outfit">React, PyTorch, Unity, Three.js, Node.js</span>
+      </div>
+      <div class="tech-row">
+        <span class="tech-label font-mono">Research</span>
+        <span class="tech-value font-outfit">3DGS, NeRF, DCT, WebXR, RCT Design, Statistical Analysis</span>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .cv-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+  }
+
+  .download-btn {
+    font-size: 12px;
+    padding: 7px 16px;
+    border-radius: 6px;
+    background: #00F0FF15;
+    color: #00F0FF;
+    border: 1px solid #00F0FF30;
+    text-decoration: none;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+
+  .download-btn:hover {
+    background: #00F0FF;
+    color: #000;
+  }
+
+  .cv-section {
+    margin-bottom: 44px;
+  }
+
+  .cv-section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .tech-row {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .tech-label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .tech-value {
+    font-size: 14px;
+    color: var(--secondary);
+  }
+
+  @media (max-width: 768px) {
+    .tech-row {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

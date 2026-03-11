@@ -1,0 +1,211 @@
+---
+import ThemeToggle from './ThemeToggle.astro';
+
+interface Props {
+  currentPage?: string;
+}
+const { currentPage = 'Home' } = Astro.props;
+
+const links = [
+  { label: 'Home', href: '/' },
+  { label: 'About', href: '/about/' },
+  { label: 'Research', href: '/research/' },
+  { label: 'Blog', href: '/blog/' },
+  { label: 'CV', href: '/cv/' },
+];
+---
+<nav class="nav">
+  <div class="nav-gradient gradient-animated"></div>
+  <div class="nav-inner container">
+    <a href="/" class="nav-logo">
+      <span class="logo-icon gradient-animated">R</span>
+      <span class="logo-text">Joshaghani</span>
+    </a>
+
+    <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Open menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <div class="nav-links" id="nav-links">
+      {links.map(link => (
+        <a
+          href={link.href}
+          class:list={['nav-link', { active: currentPage === link.label }]}
+        >
+          {link.label}
+        </a>
+      ))}
+      <div class="nav-divider"></div>
+      <ThemeToggle />
+    </div>
+  </div>
+</nav>
+
+<style>
+  .nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: var(--nav-bg);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .nav-gradient {
+    height: 2px;
+  }
+
+  .nav-inner {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    font-family: 'Outfit', sans-serif;
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.3px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+  }
+
+  .logo-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #000;
+  }
+
+  .logo-text {
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .nav-link {
+    font-family: 'Outfit', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--muted);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    text-decoration: none;
+  }
+
+  .nav-link:hover {
+    color: var(--text);
+  }
+
+  .nav-link.active {
+    font-weight: 500;
+    color: var(--text);
+    background: var(--surface);
+  }
+
+  .nav-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--border);
+    margin: 0 8px;
+  }
+
+  .mobile-menu-btn {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px;
+  }
+
+  .mobile-menu-btn span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 1px;
+    transition: all 0.3s;
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-btn {
+      display: flex;
+    }
+
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 58px;
+      left: 0;
+      right: 0;
+      background: var(--nav-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      flex-direction: column;
+      padding: 16px 32px;
+      gap: 4px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-links.open {
+      display: flex;
+    }
+
+    .nav-link {
+      width: 100%;
+      text-align: left;
+      padding: 10px 12px;
+    }
+
+    .nav-divider {
+      width: 100%;
+      height: 1px;
+      margin: 8px 0;
+    }
+  }
+</style>
+
+<script>
+  function initMobileMenu() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const links = document.getElementById('nav-links');
+    if (!btn || !links) return;
+
+    btn.addEventListener('click', () => {
+      links.classList.toggle('open');
+    });
+
+    // Close on link click
+    links.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', () => {
+        links.classList.remove('open');
+      });
+    });
+  }
+
+  initMobileMenu();
+  document.addEventListener('astro:after-swap', initMobileMenu);
+</script>

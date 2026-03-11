@@ -1,0 +1,76 @@
+---
+import NeonDot from './NeonDot.astro';
+
+interface Props {
+  period: string;
+  title: string;
+  place: string;
+  detail?: string;
+  color?: string;
+}
+
+const { period, title, place, detail, color } = Astro.props;
+---
+<div class="cv-entry">
+  <span class="cv-period font-mono">{period}</span>
+  <div class="cv-right">
+    <div class="cv-title-row">
+      {color && <NeonDot color={color} size={5} />}
+      <span class="cv-title font-outfit">{title}</span>
+    </div>
+    <div class="cv-place font-crimson" style={color ? 'margin-left: 13px;' : ''}>
+      {place}
+    </div>
+    {detail && (
+      <div class="cv-detail font-outfit" style={color ? 'margin-left: 13px;' : ''}>
+        {detail}
+      </div>
+    )}
+  </div>
+</div>
+
+<style>
+  .cv-entry {
+    display: grid;
+    grid-template-columns: 130px 1fr;
+    gap: 16px;
+    margin-bottom: 18px;
+  }
+
+  .cv-period {
+    font-size: 12px;
+    color: var(--muted);
+    padding-top: 3px;
+  }
+
+  .cv-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .cv-title {
+    font-size: 14.5px;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .cv-place {
+    font-size: 14px;
+    color: var(--secondary);
+  }
+
+  .cv-detail {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 768px) {
+    .cv-entry {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+</style>

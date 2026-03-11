@@ -1,0 +1,95 @@
+---
+import NeonDot from './NeonDot.astro';
+import NeonTag from './NeonTag.astro';
+
+interface Props {
+  title: string;
+  date: string;
+  description?: string;
+  tags?: { label: string; color: string }[];
+  dotColor: string;
+  href?: string;
+  showDescription?: boolean;
+}
+
+const { title, date, description, tags = [], dotColor, href, showDescription = false } = Astro.props;
+
+const neonColors = ['#00F0FF', '#FF3CAC', '#22D65A', '#FFE03D', '#845EF7'];
+---
+<a href={href} class="blog-entry hover-row" style="text-decoration: none;">
+  <div class="blog-entry-inner">
+    <NeonDot color={dotColor} />
+    <div class="blog-entry-content">
+      <div class="blog-entry-header">
+        <h2 class="blog-entry-title font-crimson">{title}</h2>
+        <span class="blog-entry-date font-mono">{date}</span>
+      </div>
+      {showDescription && description && (
+        <p class="blog-entry-desc font-outfit">{description}</p>
+      )}
+      {showDescription && tags.length > 0 && (
+        <div class="blog-entry-tags">
+          {tags.map((tag, i) => (
+            <NeonTag color={tag.color || neonColors[i % neonColors.length]}>{tag.label}</NeonTag>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</a>
+
+<style>
+  .blog-entry {
+    display: block;
+    padding: 14px 16px;
+    margin: 0 -16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  .blog-entry-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .blog-entry-content {
+    flex: 1;
+  }
+
+  .blog-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .blog-entry-title {
+    font-size: 15.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+    flex: 1;
+  }
+
+  .blog-entry-date {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .blog-entry-desc {
+    font-size: 13.5px;
+    color: var(--secondary);
+    line-height: 1.6;
+    margin-top: 6px;
+    margin-bottom: 10px;
+  }
+
+  .blog-entry-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+</style>

@@ -1,0 +1,259 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NeonTag from '../components/NeonTag.astro';
+import NeonDot from '../components/NeonDot.astro';
+
+const recentPubs = [
+  {
+    title: 'Evaluating XR-Based Glove Hygiene Training for Introductory Chemistry Labs',
+    venue: 'IEEE VR 2026',
+    dot: '#22D65A',
+  },
+  {
+    title: 'Triangle-DCT Compression for Triangle Splatting',
+    venue: 'In preparation',
+    dot: '#00F0FF',
+  },
+  {
+    title: 'Complexity-Aware Loss Optimization for 3D Gaussian Splatting',
+    venue: 'Targeting SIGGRAPH 2026',
+    dot: '#FF3CAC',
+  },
+];
+
+const recentPosts = [
+  {
+    title: 'Energy-based coefficient selection in Triangle-DCT',
+    date: 'Mar 2026',
+    dot: '#FFE03D',
+    slug: 'triangle-dct-coefficients',
+  },
+  {
+    title: 'What Control-Value Theory tells us about VR anxiety',
+    date: 'Feb 2026',
+    dot: '#845EF7',
+    slug: 'control-value-theory-vr',
+  },
+  {
+    title: 'Building a 32-scene benchmark for Gaussian Splatting',
+    date: 'Jan 2026',
+    dot: '#00F0FF',
+    slug: '32-scene-benchmark',
+  },
+];
+---
+<BaseLayout title="Rezvan Joshaghani — PhD Candidate, Computer Science" currentPage="Home">
+  <div class="page-content fade-in">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="hero-row">
+        <div class="avatar-wrapper">
+          <div class="avatar-ring gradient-animated">
+            <img src="/images/avatar.jpeg" alt="Rezvan Joshaghani" class="avatar-img" />
+          </div>
+        </div>
+        <div>
+          <h1 class="hero-name font-outfit">Rezvan Joshaghani</h1>
+          <p class="hero-title font-outfit">PhD Candidate &middot; Computer Science &middot; Boise State</p>
+        </div>
+      </div>
+
+      <p class="hero-bio font-crimson">
+        I study how to make 3D scenes <span class="neon-inline" style="--neon-color: #00F0FF;">smaller</span> and
+        <span class="neon-inline" style="--neon-color: #22D65A;">sharper</span>. My work spans 3D Gaussian Splatting
+        compression, neural rendering optimization, and using immersive XR to improve how people learn science.
+      </p>
+
+      <div class="tag-row">
+        <NeonTag color="#00F0FF">Neural Rendering</NeonTag>
+        <NeonTag color="#FF3CAC">3D Gaussian Splatting</NeonTag>
+        <NeonTag color="#22D65A">XR Education</NeonTag>
+        <NeonTag color="#FFE03D">Compression</NeonTag>
+      </div>
+    </div>
+
+    <!-- Gradient divider -->
+    <div class="gradient-divider"></div>
+
+    <!-- Recent Publications -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title font-outfit">Recent Publications</h2>
+        <a href="/research/" class="section-link font-outfit">View all &rarr;</a>
+      </div>
+      {recentPubs.map(p => (
+        <a href="/research/" class="list-row hover-row" style="text-decoration: none;">
+          <NeonDot color={p.dot} />
+          <span class="list-row-title font-crimson">{p.title}</span>
+          <span class="list-row-meta font-mono">{p.venue}</span>
+        </a>
+      ))}
+    </section>
+
+    <!-- Recent Posts -->
+    <section class="section">
+      <div class="section-header">
+        <h2 class="section-title font-outfit">Recent Posts</h2>
+        <a href="/blog/" class="section-link font-outfit">All posts &rarr;</a>
+      </div>
+      {recentPosts.map(p => (
+        <a href={`/blog/${p.slug}/`} class="list-row hover-row" style="text-decoration: none;">
+          <NeonDot color={p.dot} />
+          <span class="list-row-title font-crimson">{p.title}</span>
+          <span class="list-row-meta font-mono">{p.date}</span>
+        </a>
+      ))}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .hero {
+    margin-bottom: 48px;
+  }
+
+  .hero-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 28px;
+  }
+
+  .avatar-wrapper {
+    position: relative;
+  }
+
+  .avatar-ring {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    padding: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .avatar-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    background: var(--bg);
+  }
+
+  .hero-name {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+
+  .hero-title {
+    font-size: 13px;
+    color: var(--muted);
+    font-weight: 400;
+  }
+
+  .hero-bio {
+    font-size: 17.5px;
+    color: var(--secondary);
+    line-height: 1.75;
+    max-width: 600px;
+    margin-bottom: 24px;
+  }
+
+  .neon-inline {
+    color: var(--neon-color);
+    font-weight: 500;
+  }
+
+  [data-theme="dark"] .neon-inline {
+    text-shadow: 0 0 12px color-mix(in srgb, var(--neon-color) 30%, transparent);
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .gradient-divider {
+    height: 1px;
+    margin-bottom: 48px;
+    background: linear-gradient(to right, #00F0FF, #FF3CAC, #22D65A, transparent 80%);
+    opacity: 0.5;
+  }
+
+  .section {
+    margin-bottom: 52px;
+  }
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 16px;
+  }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+
+  .section-link {
+    font-size: 12px;
+    color: #00F0FF;
+    text-decoration: none;
+  }
+
+  .list-row {
+    padding: 14px 16px;
+    margin: 0 -16px;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    cursor: pointer;
+  }
+
+  .list-row-title {
+    font-size: 15.5px;
+    color: var(--text);
+    line-height: 1.5;
+    flex: 1;
+  }
+
+  .list-row-meta {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 768px) {
+    .hero-row {
+      gap: 14px;
+    }
+
+    .avatar-ring {
+      width: 60px;
+      height: 60px;
+    }
+
+    .hero-name {
+      font-size: 22px;
+    }
+
+    .list-row {
+      flex-wrap: wrap;
+    }
+
+    .list-row-meta {
+      margin-left: 22px;
+    }
+  }
+</style>

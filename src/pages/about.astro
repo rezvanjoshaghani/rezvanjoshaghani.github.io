@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NeonTag from '../components/NeonTag.astro';
+---
+<BaseLayout
+  title="About — Rezvan Joshaghani"
+  description="PhD candidate in Computer Science at Boise State University. Research in neural rendering, 3DGS compression, and XR education."
+  currentPage="About"
+>
+  <div class="page-content fade-in">
+    <h1 class="page-title font-outfit">About</h1>
+    <div class="about-grid">
+      <div class="about-left">
+        <div class="photo-frame gradient-animated">
+          <img src="/images/avatar.jpeg" alt="Rezvan Joshaghani" class="photo-img" />
+        </div>
+        <div class="contact-info">
+          <div class="contact-item">
+            <div class="contact-label font-outfit">Email</div>
+            <div class="contact-value font-outfit">rezvanjoshaghani@u.boisestate.edu</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label font-outfit">Location</div>
+            <div class="contact-value font-outfit">Boise, Idaho</div>
+          </div>
+          <div class="contact-item">
+            <div class="contact-label font-outfit">Advisor</div>
+            <div class="contact-value font-outfit">Steve Cutchin</div>
+          </div>
+        </div>
+      </div>
+      <div class="about-right font-crimson">
+        <p>
+          I'm a PhD candidate in Computer Science at Boise State University, working with
+          <span class="text-strong">Steve Cutchin</span>. My research focuses on making 3D scene
+          representations more efficient and exploring how immersive technologies can transform STEM education.
+        </p>
+        <p>
+          On the rendering side, I'm developing
+          <span class="neon-inline" style="--neon-color: #00F0FF;">Triangle-DCT</span>, a compression
+          pipeline for Triangle Splatting that uses energy-based DCT coefficient selection. I'm also building
+          <span class="neon-inline" style="--neon-color: #FF3CAC;">complexity-aware loss functions</span>
+          for 3D Gaussian Splatting that adapt to scene difficulty, evaluated across a 32-scene benchmark.
+        </p>
+        <p>
+          On the education side, I led a three-arm RCT evaluating
+          <span class="neon-inline" style="--neon-color: #22D65A;">XR-based glove hygiene training</span>
+          for chemistry labs, published at IEEE VR 2026. VR reduced anticipatory anxiety without shifting
+          self-efficacy — a theoretically meaningful finding through Control-Value Theory.
+        </p>
+        <p class="last-para">
+          I also co-founded
+          <span class="neon-inline" style="--neon-color: #FFE03D;">Elevated</span>, an AI-powered
+          scholarship matching platform. Before grad school, I built enterprise dashboards at Symantec
+          and contributed to projects like the Atlas of Drowned Towns.
+        </p>
+        <div class="tag-row">
+          <NeonTag color="#00F0FF">3D Gaussian Splatting</NeonTag>
+          <NeonTag color="#FF3CAC">Neural Rendering</NeonTag>
+          <NeonTag color="#22D65A">Compression</NeonTag>
+          <NeonTag color="#FFE03D">XR/VR</NeonTag>
+          <NeonTag color="#845EF7">STEM Education</NeonTag>
+          <NeonTag color="#00F0FF">HCI</NeonTag>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 40px;
+  }
+
+  .about-grid {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 48px;
+  }
+
+  .photo-frame {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    border-radius: 10px;
+    padding: 2px;
+  }
+
+  .photo-img {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--photo-bg);
+  }
+
+  .contact-info {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .contact-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+
+  .contact-value {
+    font-size: 13px;
+    color: var(--secondary);
+  }
+
+  .about-right {
+    font-size: 16px;
+    color: var(--secondary);
+    line-height: 1.8;
+  }
+
+  .about-right p {
+    margin-bottom: 20px;
+  }
+
+  .about-right .last-para {
+    margin-bottom: 28px;
+  }
+
+  .text-strong {
+    color: var(--text);
+  }
+
+  .neon-inline {
+    color: var(--neon-color);
+    font-weight: 500;
+  }
+
+  [data-theme="dark"] .neon-inline {
+    text-shadow: 0 0 12px color-mix(in srgb, var(--neon-color) 30%, transparent);
+  }
+
+  .tag-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  @media (max-width: 768px) {
+    .about-grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .photo-frame {
+      max-width: 200px;
+    }
+  }
+</style>

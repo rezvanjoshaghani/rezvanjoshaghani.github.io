@@ -1,0 +1,145 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import NeonDot from '../../components/NeonDot.astro';
+import NeonTag from '../../components/NeonTag.astro';
+import { getCollection } from 'astro:content';
+
+const neonColors = ['#00F0FF', '#FF3CAC', '#22D65A', '#FFE03D', '#845EF7'];
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+---
+<BaseLayout
+  title="Blog — Rezvan Joshaghani"
+  description="Research notes, experiment write-ups, and occasional reflections from Rezvan Joshaghani."
+  currentPage="Blog"
+>
+  <div class="page-content fade-in">
+    <h1 class="page-title font-outfit">Blog</h1>
+    <p class="page-subtitle font-crimson">
+      Research notes, experiment write-ups, and occasional reflections.
+    </p>
+    <a href="/rss.xml" class="rss-link font-outfit">Subscribe via RSS &rarr;</a>
+
+    <div class="post-list">
+      {posts.map((post, i) => {
+        const formattedDate = post.data.date.toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+        return (
+          <article>
+            <a href={`/blog/${post.id.replace(/\.md$/, '')}/`} class="post-entry hover-row" style="text-decoration: none;">
+              <div class="post-entry-inner">
+                <NeonDot color={post.data.dotColor} />
+                <div class="post-entry-content">
+                  <div class="post-entry-header">
+                    <h2 class="post-entry-title font-crimson">{post.data.title}</h2>
+                    <span class="post-entry-date font-mono">{formattedDate}</span>
+                  </div>
+                  <p class="post-entry-desc font-outfit">{post.data.description}</p>
+                  <div class="post-entry-tags">
+                    {post.data.tags.map((tag, j) => (
+                      <NeonTag color={neonColors[j % neonColors.length]}>{tag}</NeonTag>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </a>
+            {i < posts.length - 1 && <div class="post-divider"></div>}
+          </article>
+        );
+      })}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 15.5px;
+    color: var(--secondary);
+    line-height: 1.6;
+    margin-bottom: 8px;
+    max-width: 480px;
+  }
+
+  .rss-link {
+    font-size: 12px;
+    color: #00F0FF;
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 36px;
+  }
+
+  .post-entry {
+    display: block;
+    padding: 24px 20px;
+    margin: 0 -20px;
+    border-radius: 10px;
+    cursor: pointer;
+  }
+
+  .post-entry-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+  }
+
+  .post-entry-content {
+    flex: 1;
+  }
+
+  .post-entry-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 6px;
+  }
+
+  .post-entry-title {
+    font-size: 17.5px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.35;
+  }
+
+  .post-entry-date {
+    font-size: 11px;
+    color: var(--muted);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .post-entry-desc {
+    font-size: 13.5px;
+    color: var(--secondary);
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .post-entry-tags {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .post-divider {
+    border-bottom: 1px solid var(--border);
+    margin-top: 20px;
+    margin-left: 20px;
+  }
+
+  @media (max-width: 768px) {
+    .post-entry-header {
+      flex-direction: column;
+      gap: 4px;
+    }
+  }
+</style>

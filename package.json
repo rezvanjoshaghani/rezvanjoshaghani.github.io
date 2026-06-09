@@ -11,6 +11,6 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.0",
     "@astrojs/sitemap": "^3.0.0",
-    "astro": "^5.7.0"
+    "astro": "^6.1.10"
   }
 }

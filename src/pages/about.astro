@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NeonTag from '../components/NeonTag.astro';
 ---
 <BaseLayout
-  title="About — Rezvan Joshaghani"
+  title="About | Rezvan Joshaghani"
   description="PhD candidate in Computer Science at Boise State University. Research in neural rendering, 3DGS compression, and XR education."
   currentPage="About"
 >
@@ -19,48 +19,41 @@ import NeonTag from '../components/NeonTag.astro';
             <div class="contact-label font-outfit">Email</div>
             <div class="contact-value font-outfit">rezvanjoshaghani@u.boisestate.edu</div>
           </div>
-          <div class="contact-item">
-            <div class="contact-label font-outfit">Location</div>
-            <div class="contact-value font-outfit">Boise, Idaho</div>
-          </div>
-          <div class="contact-item">
-            <div class="contact-label font-outfit">Advisor</div>
-            <div class="contact-value font-outfit">Steve Cutchin</div>
-          </div>
         </div>
       </div>
       <div class="about-right font-crimson">
         <p>
           I'm a PhD candidate in Computer Science at Boise State University, working with
-          <span class="text-strong">Steve Cutchin</span>. My research focuses on making 3D scene
-          representations more efficient and exploring how immersive technologies can transform STEM education.
+          <span class="text-strong">Steve Cutchin</span>. My research sits at the intersection of
+          <span class="neon-inline" style="--neon-color: #00F0FF;">computer vision</span>,
+          <span class="neon-inline" style="--neon-color: #FF3CAC;">graphics</span>, and
+          <span class="neon-inline" style="--neon-color: #22D65A;">AI</span>.
         </p>
         <p>
-          On the rendering side, I'm developing
-          <span class="neon-inline" style="--neon-color: #00F0FF;">Triangle-DCT</span>, a compression
-          pipeline for Triangle Splatting that uses energy-based DCT coefficient selection. I'm also building
-          <span class="neon-inline" style="--neon-color: #FF3CAC;">complexity-aware loss functions</span>
-          for 3D Gaussian Splatting that adapt to scene difficulty, evaluated across a 32-scene benchmark.
+          I focus on neural 3D reconstruction and efficient scene representation, studying how systems
+          like Neural Radiance Fields and 3D Gaussian Splatting can be optimized for perceptual quality,
+          compression, and practical usability. My work explores how loss functions, scene complexity,
+          and super-resolution affect the quality of reconstructed 3D scenes.
         </p>
         <p>
-          On the education side, I led a three-arm RCT evaluating
-          <span class="neon-inline" style="--neon-color: #22D65A;">XR-based glove hygiene training</span>
-          for chemistry labs, published at IEEE VR 2026. VR reduced anticipatory anxiety without shifting
-          self-efficacy — a theoretically meaningful finding through Control-Value Theory.
+          I'm especially interested in building AI tools and 3D systems that move beyond benchmark
+          performance and become useful, accessible technologies for researchers, creators, educators,
+          and everyday users.
         </p>
         <p class="last-para">
-          I also co-founded
-          <span class="neon-inline" style="--neon-color: #FFE03D;">Elevated</span>, an AI-powered
-          scholarship matching platform. Before grad school, I built enterprise dashboards at Symantec
-          and contributed to projects like the Atlas of Drowned Towns.
+          My published work also spans
+          <span class="neon-inline" style="--neon-color: #22D65A;">XR</span>, including
+          VR training modules for chemistry labs (IEEE TVCG), immersive technology in
+          undergraduate science education (IEEE VR), and VR/MR collaboration systems, as well as
+          <span class="neon-inline" style="--neon-color: #845EF7;">privacy</span>, where I've worked on
+          formal verification of privacy policies and equitable privacy protections (FAT*).
         </p>
         <div class="tag-row">
-          <NeonTag color="#00F0FF">3D Gaussian Splatting</NeonTag>
+          <NeonTag color="#00F0FF">Computer Vision</NeonTag>
           <NeonTag color="#FF3CAC">Neural Rendering</NeonTag>
-          <NeonTag color="#22D65A">Compression</NeonTag>
+          <NeonTag color="#22D65A">3D Reconstruction</NeonTag>
           <NeonTag color="#FFE03D">XR/VR</NeonTag>
-          <NeonTag color="#845EF7">STEM Education</NeonTag>
-          <NeonTag color="#00F0FF">HCI</NeonTag>
+          <NeonTag color="#845EF7">Privacy</NeonTag>
         </div>
       </div>
     </div>

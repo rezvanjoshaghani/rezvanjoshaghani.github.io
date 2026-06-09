@@ -12,7 +12,7 @@ interface Props {
 
 const {
   title,
-  description = 'Rezvan Joshaghani — PhD Candidate in Computer Science at Boise State University. Neural rendering, 3DGS compression, XR education.',
+  description = 'Rezvan Joshaghani | PhD Candidate in Computer Science at Boise State University. Neural rendering, 3D reconstruction, computer vision.',
   currentPage = 'Home',
   ogImage = '/images/avatar.jpeg',
 } = Astro.props;
@@ -45,6 +45,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
   <!-- RSS -->
   <link rel="alternate" type="application/rss+xml" title="Rezvan Joshaghani's Blog" href="/rss.xml" />
+
+  <!-- Google Analytics -->
+  <script is:inline async src="https://www.googletagmanager.com/gtag/js?id=G-C52HJ4TN78"></script>
+  <script is:inline>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-C52HJ4TN78');
+  </script>
 
   <!-- Theme: prevent flash of wrong theme -->
   <script is:inline>

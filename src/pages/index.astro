@@ -2,73 +2,53 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import NeonTag from '../components/NeonTag.astro';
 import NeonDot from '../components/NeonDot.astro';
+import publications from '../data/publications.json';
+import { getCollection } from 'astro:content';
 
-const recentPubs = [
-  {
-    title: 'Evaluating XR-Based Glove Hygiene Training for Introductory Chemistry Labs',
-    venue: 'IEEE VR 2026',
-    dot: '#22D65A',
-  },
-  {
-    title: 'Triangle-DCT Compression for Triangle Splatting',
-    venue: 'In preparation',
-    dot: '#00F0FF',
-  },
-  {
-    title: 'Complexity-Aware Loss Optimization for 3D Gaussian Splatting',
-    venue: 'Targeting SIGGRAPH 2026',
-    dot: '#FF3CAC',
-  },
-];
+const catColors: Record<string, string> = {
+  'XR': '#22D65A',
+  'Privacy': '#845EF7',
+};
 
-const recentPosts = [
-  {
-    title: 'Energy-based coefficient selection in Triangle-DCT',
-    date: 'Mar 2026',
-    dot: '#FFE03D',
-    slug: 'triangle-dct-coefficients',
-  },
-  {
-    title: 'What Control-Value Theory tells us about VR anxiety',
-    date: 'Feb 2026',
-    dot: '#845EF7',
-    slug: 'control-value-theory-vr',
-  },
-  {
-    title: 'Building a 32-scene benchmark for Gaussian Splatting',
-    date: 'Jan 2026',
-    dot: '#00F0FF',
-    slug: '32-scene-benchmark',
-  },
-];
+const recentPubs = publications.slice(0, 3).map(p => ({
+  title: p.title,
+  venue: p.venue.split(',')[0],
+  dot: catColors[p.category] || '#00F0FF',
+}));
+
+const recentPosts = (await getCollection('blog'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3)
+  .map(p => ({
+    title: p.data.title,
+    date: p.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', timeZone: 'UTC' }),
+    dot: p.data.dotColor,
+    slug: p.slug,
+  }));
 ---
-<BaseLayout title="Rezvan Joshaghani — PhD Candidate, Computer Science" currentPage="Home">
+<BaseLayout title="Rezvan Joshaghani | PhD Candidate, Computer Science" currentPage="Home">
   <div class="page-content fade-in">
     <!-- Hero -->
     <div class="hero">
-      <div class="hero-row">
-        <div class="avatar-wrapper">
-          <div class="avatar-ring gradient-animated">
-            <img src="/images/avatar.jpeg" alt="Rezvan Joshaghani" class="avatar-img" />
-          </div>
-        </div>
-        <div>
-          <h1 class="hero-name font-outfit">Rezvan Joshaghani</h1>
-          <p class="hero-title font-outfit">PhD Candidate &middot; Computer Science &middot; Boise State</p>
-        </div>
+      <div class="hero-header">
+        <h1 class="hero-name font-outfit">Rezvan Joshaghani</h1>
+        <p class="hero-title font-outfit">PhD Candidate &middot; Computer Science &middot; Boise State University</p>
       </div>
 
       <p class="hero-bio font-crimson">
-        I study how to make 3D scenes <span class="neon-inline" style="--neon-color: #00F0FF;">smaller</span> and
-        <span class="neon-inline" style="--neon-color: #22D65A;">sharper</span>. My work spans 3D Gaussian Splatting
-        compression, neural rendering optimization, and using immersive XR to improve how people learn science.
+        My research sits at the intersection of
+        <span class="neon-inline" style="--neon-color: #00F0FF;">computer vision</span>,
+        <span class="neon-inline" style="--neon-color: #FF3CAC;">graphics</span>, and
+        <span class="neon-inline" style="--neon-color: #22D65A;">AI</span>.
+        I focus on neural 3D reconstruction, optimizing systems like NeRF and 3D Gaussian Splatting
+        for perceptual quality, compression, and real-world usability.
       </p>
 
       <div class="tag-row">
-        <NeonTag color="#00F0FF">Neural Rendering</NeonTag>
-        <NeonTag color="#FF3CAC">3D Gaussian Splatting</NeonTag>
-        <NeonTag color="#22D65A">XR Education</NeonTag>
-        <NeonTag color="#FFE03D">Compression</NeonTag>
+        <NeonTag color="#00F0FF">Computer Vision</NeonTag>
+        <NeonTag color="#FF3CAC">Neural Rendering</NeonTag>
+        <NeonTag color="#22D65A">3D Reconstruction</NeonTag>
+        <NeonTag color="#FFE03D">XR/VR</NeonTag>
       </div>
     </div>
 
@@ -112,33 +92,8 @@ const recentPosts = [
     margin-bottom: 48px;
   }
 
-  .hero-row {
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  .hero-header {
     margin-bottom: 28px;
-  }
-
-  .avatar-wrapper {
-    position: relative;
-  }
-
-  .avatar-ring {
-    width: 76px;
-    height: 76px;
-    border-radius: 50%;
-    padding: 2px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .avatar-img {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    object-fit: cover;
-    background: var(--bg);
   }
 
   .hero-name {
@@ -235,15 +190,6 @@ const recentPosts = [
   }
 
   @media (max-width: 768px) {
-    .hero-row {
-      gap: 14px;
-    }
-
-    .avatar-ring {
-      width: 60px;
-      height: 60px;
-    }
-
     .hero-name {
       font-size: 22px;
     }

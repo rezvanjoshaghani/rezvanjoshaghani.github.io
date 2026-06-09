@@ -14,7 +14,7 @@ const { title, date, description, tags, dotColor } = Astro.props;
 const neonColors = ['#00F0FF', '#FF3CAC', '#22D65A', '#FFE03D', '#845EF7'];
 const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' });
 ---
-<BaseLayout title={`${title} — Rezvan Joshaghani`} description={description} currentPage="Blog">
+<BaseLayout title={`${title} | Rezvan Joshaghani`} description={description} currentPage="Blog">
   <article class="page-content fade-in">
     <a href="/blog/" class="back-link font-outfit">&larr; Back to blog</a>
     <header class="post-header">

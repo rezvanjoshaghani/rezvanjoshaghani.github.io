@@ -143,4 +143,29 @@ const formattedDate = date.toLocaleDateString('en-US', { year: 'numeric', month:
     color: var(--muted);
     margin-bottom: 20px;
   }
+
+  .post-content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 24px;
+    font-size: 15px;
+  }
+
+  .post-content :global(th),
+  .post-content :global(td) {
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    text-align: left;
+  }
+
+  .post-content :global(th) {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    color: var(--text);
+    background: var(--code-bg);
+  }
+
+  .post-content :global(td) {
+    color: var(--secondary);
+  }
 </style>

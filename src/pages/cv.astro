@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import CVEntry from '../components/CVEntry.astro';
 ---
 <BaseLayout
-  title="CV — Rezvan Joshaghani"
+  title="CV | Rezvan Joshaghani"
   description="Curriculum Vitae of Rezvan Joshaghani. Education, experience, publications, and technical skills."
   currentPage="CV"
 >
@@ -24,23 +24,20 @@ import CVEntry from '../components/CVEntry.astro';
     <section class="cv-section">
       <h2 class="cv-section-title font-outfit">Education</h2>
       <CVEntry
-        period="2021 – present"
-        title="Ph.D. Computer Science"
+        period="2019 – present"
+        title="Ph.D. in Computer Science (expected 2026)"
         place="Boise State University"
-        detail="Advisor: Steve Cutchin. Neural rendering, 3DGS compression, XR education."
+        detail="Advisor: Steve Cutchin. Neural 3D reconstruction, perceptual optimization, scene complexity, compression, and super-resolution."
         color="#00F0FF"
       />
       <CVEntry
-        period="2018 – 2021"
-        title="M.S. Computer Science"
+        title="M.S. in Computer Science"
         place="Boise State University"
-        detail="Computer graphics and visualization"
         color="#22D65A"
       />
       <CVEntry
-        period="2014 – 2018"
-        title="B.S. Software Engineering"
-        place="Boise State University"
+        title="B.S. in Software Engineering"
+        place="K. N. Toosi University of Technology"
         color="#FFE03D"
       />
     </section>
@@ -49,60 +46,63 @@ import CVEntry from '../components/CVEntry.astro';
     <section class="cv-section">
       <h2 class="cv-section-title font-outfit">Experience</h2>
       <CVEntry
-        period="2023 – present"
-        title="Co-Founder"
-        place="Elevated"
-        detail="AI-powered scholarship matching and essay coaching platform"
-        color="#FF3CAC"
-      />
-      <CVEntry
-        period="2021 – present"
-        title="Graduate Research Assistant"
+        period="Aug 2019 – present"
+        title="Ph.D. Research Assistant"
         place="Boise State University"
-        detail="Neural rendering, 3DGS compression, XR-based STEM education"
+        detail="Neural rendering, 3D reconstruction, perceptual optimization. Led development on NSF-funded Chemistry VR app, Stain Luminary visualization cave, and Atlas of Drowned Towns."
         color="#00F0FF"
       />
       <CVEntry
-        period="2018 – 2021"
-        title="Software Engineer"
-        place="Symantec (Broadcom)"
-        detail="Unified Reporting dashboard, enterprise security tooling"
+        period="Jan – May 2023"
+        title="Research Scientist Intern"
+        place="Silverdraft SuperComputing"
+        detail="Designed and integrated a VR/MR collaboration application for Autodesk VRED with Varjo XR-3."
+        color="#FF3CAC"
+      />
+      <CVEntry
+        period="Jun – Aug 2019"
+        title="Full-Stack Software Engineer Intern"
+        place="Symantec"
+        detail="Built a configurable Unified Reporting dashboard for SDLC and QA metrics."
         color="#845EF7"
+      />
+      <CVEntry
+        period="Aug 2017 – May 2019"
+        title="Research Assistant"
+        place="Boise State University"
+        detail="Formal verification of privacy preferences, algorithmic fairness, and children's understanding of privacy."
+        color="#22D65A"
       />
     </section>
 
     <!-- Awards -->
     <section class="cv-section">
-      <h2 class="cv-section-title font-outfit">Awards & Fellowships</h2>
+      <h2 class="cv-section-title font-outfit">Honors</h2>
       <CVEntry
-        period="2025"
-        title="Idaho Entrepreneurship Challenge"
-        place="Elevated"
+        title="Story Collider Fellowship"
+        detail="STEM communication"
+        place="Boise State University"
       />
       <CVEntry
-        period="2024"
-        title="Story Collider Fellowship"
+        title="Graduate Showcase Awards"
+        detail="Computer Science and Cybersecurity"
+        place="Boise State University"
+      />
+      <CVEntry
+        title="Audience Choice Award"
+        detail="Three Minute Thesis Competition"
         place="Boise State University"
       />
     </section>
 
-    <!-- Committee -->
+    <!-- Patent -->
     <section class="cv-section">
-      <h2 class="cv-section-title font-outfit">Committee</h2>
+      <h2 class="cv-section-title font-outfit">Patent</h2>
       <CVEntry
-        period="Advisor"
-        title="Dr. Steve Cutchin"
-        place="Computer Science, Boise State"
-      />
-      <CVEntry
-        period="Member"
-        title="Dr. Casey Kennington"
-        place="Computer Science, Boise State"
-      />
-      <CVEntry
-        period="Member"
-        title="Dr. Jerry Fails"
-        place="Computer Science, Boise State"
+        period="2013"
+        title="A Navigational Aid for the Visually Impaired"
+        place="Tehran, Iran"
+        color="#FFE03D"
       />
     </section>
 
@@ -111,15 +111,23 @@ import CVEntry from '../components/CVEntry.astro';
       <h2 class="cv-section-title font-outfit">Technical</h2>
       <div class="tech-row">
         <span class="tech-label font-mono">Languages</span>
-        <span class="tech-value font-outfit">Python, C++, JavaScript, TypeScript, C#</span>
+        <span class="tech-value font-outfit">Python, C++, JavaScript, TypeScript</span>
       </div>
       <div class="tech-row">
-        <span class="tech-label font-mono">Frameworks</span>
-        <span class="tech-value font-outfit">React, PyTorch, Unity, Three.js, Node.js</span>
+        <span class="tech-label font-mono">ML / Vision</span>
+        <span class="tech-value font-outfit">PyTorch, 3DGS, NeRF, Hugging Face, deep learning, perceptual metrics</span>
       </div>
       <div class="tech-row">
-        <span class="tech-label font-mono">Research</span>
-        <span class="tech-value font-outfit">3DGS, NeRF, DCT, WebXR, RCT Design, Statistical Analysis</span>
+        <span class="tech-label font-mono">Platforms</span>
+        <span class="tech-value font-outfit">React, Angular, Unity, Docker, Terraform, AWS, GCP</span>
+      </div>
+      <div class="tech-row">
+        <span class="tech-label font-mono">Infrastructure</span>
+        <span class="tech-value font-outfit">SLURM/HPC, GPU pipelines, PostgreSQL, Elasticsearch, REST APIs</span>
+      </div>
+      <div class="tech-row">
+        <span class="tech-label font-mono">XR</span>
+        <span class="tech-value font-outfit">Meta Quest, Varjo XR-3, Autodesk VRED, VR/AR/XR applications</span>
       </div>
     </section>
   </div>

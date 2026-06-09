@@ -1,0 +1,83 @@
+[
+  {
+    "title": "XR Module for Enhancing Glove Hygiene Skills in First-Year Chemistry Laboratories",
+    "authors": "R. Joshaghani, A. Winters, Y. Zong, S. Cutchin",
+    "venue": "IEEE Transactions on Visualization and Computer Graphics",
+    "year": 2026,
+    "citations": null,
+    "category": "XR",
+    "summary": "Develops and evaluates an XR training module for teaching proper glove hygiene skills in introductory chemistry laboratory courses."
+  },
+  {
+    "title": "Virtual Reality and the Affective Gap: Evidence for Immersive Technology as Transitional Support in Undergraduate Science Education",
+    "authors": "R. Joshaghani, Y. Zong, S. Cutchin",
+    "venue": "2026 IEEE Conference on Virtual Reality and 3D User Interfaces",
+    "year": 2026,
+    "citations": null,
+    "category": "XR",
+    "summary": "Investigates how VR serves as transitional support in undergraduate science education, examining the affective gap between immersive and traditional learning environments."
+  },
+  {
+    "title": "Drones, Virtual Reality, and Modeling: Communicating Catastrophic Dam Failure",
+    "authors": "H.R. Spero, I. Vazquez-Lopez, K. Miller, R. Joshaghani, S. Cutchin",
+    "venue": "International Journal of Digital Earth, 15(1), 585–605",
+    "year": 2022,
+    "citations": 34,
+    "category": "XR",
+    "summary": "Combines drone imagery, VR environments, and computational modeling to communicate the risks and impacts of catastrophic dam failure scenarios."
+  },
+  {
+    "title": "Anon What What? Children's Understanding of the Language of Privacy",
+    "authors": "S. Black, R. Joshaghani, D.K. Ratakonda, H. Mehrpouyan, J.A. Fails",
+    "venue": "Proceedings of the 18th ACM International Conference on Interaction Design and Children (IDC)",
+    "year": 2019,
+    "citations": 9,
+    "category": "Privacy",
+    "summary": "Examines how children understand privacy-related language and terminology, informing the design of child-centered privacy interfaces."
+  },
+  {
+    "title": "Formal Specification and Verification of User-Centric Privacy Policies for Ubiquitous Systems",
+    "authors": "R. Joshaghani, S. Black, E. Sherman, H. Mehrpouyan",
+    "venue": "Proceedings of the 23rd International Database Applications & Engineering Symposium (IDEAS)",
+    "year": 2019,
+    "citations": 10,
+    "category": "Privacy",
+    "summary": "Proposes formal methods for specifying and verifying user-centric privacy policies in ubiquitous computing environments."
+  },
+  {
+    "title": "UNICORN Framework: A User-Centric Approach Toward Formal Verification of Privacy Norms",
+    "authors": "R. Joshaghani",
+    "venue": "Boise State University, MS Thesis",
+    "year": 2019,
+    "citations": null,
+    "category": "Privacy",
+    "summary": "Presents the UNICORN framework for user-centric formal verification of privacy norms in computing systems."
+  },
+  {
+    "title": "Privacy for All: Ensuring Fair and Equitable Privacy Protections",
+    "authors": "M.D. Ekstrand, R. Joshaghani, H. Mehrpouyan",
+    "venue": "Conference on Fairness, Accountability, and Transparency (FAT*), 35–47",
+    "year": 2018,
+    "citations": 121,
+    "category": "Privacy",
+    "summary": "Examines the intersection of fairness and privacy, arguing that privacy protections must account for differential impacts across demographic groups."
+  },
+  {
+    "title": "Do Different Groups Have Comparable Privacy Tradeoffs?",
+    "authors": "R. Joshaghani, M.D. Ekstrand, B. Knijnenburg, H. Mehrpouyan",
+    "venue": "CHI 2018 Workshop on Moving Beyond a 'One-Size Fits All'",
+    "year": 2018,
+    "citations": 4,
+    "category": "Privacy",
+    "summary": "Investigates whether different demographic groups experience comparable tradeoffs in privacy decision-making."
+  },
+  {
+    "title": "A Model-Checking Approach for Enforcing Purpose-Based Privacy Policies",
+    "authors": "R. Joshaghani, H. Mehrpouyan",
+    "venue": "2017 IEEE Symposium on Privacy-Aware Computing (PAC), 178–179",
+    "year": 2017,
+    "citations": 6,
+    "category": "Privacy",
+    "summary": "Applies model-checking techniques to enforce purpose-based privacy policies in computing systems."
+  }
+]

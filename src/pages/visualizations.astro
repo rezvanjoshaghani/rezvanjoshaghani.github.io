@@ -1,0 +1,1010 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+<BaseLayout
+  title="Visualizations | Rezvan Joshaghani"
+  description="Interactive data visualizations for complexity embeddings and 3D Gaussian Splatting baseline metrics."
+  currentPage="Visualizations"
+>
+  <div class="page-content fade-in">
+    <h1 class="page-title font-outfit">Visualizations</h1>
+    <p class="page-subtitle font-crimson">
+      Interactive exploration of baseline 3DGS metrics across datasets and scenes.
+      Data is fetched live from Supabase.
+    </p>
+
+    <!-- Loading state -->
+    <div id="loading-state" class="loading-state">
+      <div class="loading-spinner"></div>
+      <span class="font-outfit">Loading metrics data...</span>
+    </div>
+
+    <!-- Error state -->
+    <div id="error-state" class="error-state" style="display: none;">
+      <span class="font-outfit" id="error-message">Failed to load data.</span>
+    </div>
+
+    <!-- Dashboard content (hidden until data loads) -->
+    <div id="dashboard" style="display: none;">
+
+      <!-- Filter controls -->
+      <div class="controls">
+        <div class="control-group">
+          <label class="control-label font-outfit">Dataset</label>
+          <div id="dataset-filters" class="filter-pills"></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label font-outfit">Iteration</label>
+          <div id="iteration-filters" class="filter-pills"></div>
+        </div>
+        <div class="control-group">
+          <label class="control-label font-outfit">Metric</label>
+          <div id="metric-selector" class="filter-pills"></div>
+        </div>
+      </div>
+
+      <!-- Summary stats row -->
+      <div class="stats-row" id="stats-row">
+        <div class="stat-card">
+          <span class="stat-value font-outfit" id="stat-scenes">-</span>
+          <span class="stat-label font-mono">Scenes</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value font-outfit" id="stat-avg-psnr">-</span>
+          <span class="stat-label font-mono">Avg PSNR</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value font-outfit" id="stat-avg-ssim">-</span>
+          <span class="stat-label font-mono">Avg SSIM</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-value font-outfit" id="stat-avg-lpips">-</span>
+          <span class="stat-label font-mono">Avg LPIPS</span>
+        </div>
+      </div>
+
+      <!-- Chart: Metric by Scene -->
+      <div class="chart-container">
+        <h2 class="chart-title font-outfit">
+          <span class="neon-dot" style="background: #00F0FF; box-shadow: 0 0 8px #00F0FF50;"></span>
+          Metric by Scene
+        </h2>
+        <p class="chart-desc font-crimson">Quality metric per scene, grouped by iteration. Select metric and datasets above.</p>
+        <div class="chart-wrapper">
+          <canvas id="chart-metric-by-scene"></canvas>
+        </div>
+      </div>
+
+      <!-- Chart row: two side by side -->
+      <div class="chart-grid">
+        <!-- Chart: Quality vs Render Time -->
+        <div class="chart-container">
+          <h2 class="chart-title font-outfit">
+            <span class="neon-dot" style="background: #FF3CAC; box-shadow: 0 0 8px #FF3CAC50;"></span>
+            Quality vs. Render Time
+          </h2>
+          <p class="chart-desc font-crimson">PSNR against time per image. Higher-left is better.</p>
+          <div class="chart-wrapper chart-square">
+            <canvas id="chart-quality-vs-time"></canvas>
+          </div>
+        </div>
+
+        <!-- Chart: Gaussians vs Quality -->
+        <div class="chart-container">
+          <h2 class="chart-title font-outfit">
+            <span class="neon-dot" style="background: #22D65A; box-shadow: 0 0 8px #22D65A50;"></span>
+            Gaussians vs. Quality
+          </h2>
+          <p class="chart-desc font-crimson">Number of Gaussians against PSNR per scene.</p>
+          <div class="chart-wrapper chart-square">
+            <canvas id="chart-gaussians-vs-quality"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chart: Iteration Improvement -->
+      <div class="chart-container">
+        <h2 class="chart-title font-outfit">
+          <span class="neon-dot" style="background: #FFE03D; box-shadow: 0 0 8px #FFE03D50;"></span>
+          Iteration Improvement (7k &rarr; 30k)
+        </h2>
+        <p class="chart-desc font-crimson">PSNR gain from 7,000 to 30,000 iterations for scenes with both checkpoints.</p>
+        <div class="chart-wrapper">
+          <canvas id="chart-iteration-improvement"></canvas>
+        </div>
+      </div>
+
+      <!-- Dataset comparison radar -->
+      <div class="chart-container">
+        <h2 class="chart-title font-outfit">
+          <span class="neon-dot" style="background: #845EF7; box-shadow: 0 0 8px #845EF750;"></span>
+          Dataset Comparison
+        </h2>
+        <p class="chart-desc font-crimson">Normalized average metrics per dataset at best available iteration.</p>
+        <div class="chart-wrapper chart-square" style="max-width: 500px; margin: 0 auto;">
+          <canvas id="chart-dataset-radar"></canvas>
+        </div>
+      </div>
+
+      <!-- Data table -->
+      <div class="table-section">
+        <h2 class="chart-title font-outfit">
+          <span class="neon-dot" style="background: #00F0FF; box-shadow: 0 0 8px #00F0FF50;"></span>
+          Raw Data
+        </h2>
+        <div class="table-wrapper">
+          <table id="data-table" class="data-table">
+            <thead>
+              <tr>
+                <th class="font-outfit">Dataset</th>
+                <th class="font-outfit">Scene</th>
+                <th class="font-outfit">Iter</th>
+                <th class="font-outfit">PSNR</th>
+                <th class="font-outfit">SSIM</th>
+                <th class="font-outfit">LPIPS</th>
+                <th class="font-outfit">Time/Img</th>
+                <th class="font-outfit">Gaussians</th>
+              </tr>
+            </thead>
+            <tbody id="data-table-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
+
+<!-- Chart.js -->
+<script is:inline src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+
+<script is:inline>
+(function () {
+  // ─── Supabase config ───
+  const SUPABASE_URL = 'https://cgclnguzujyyspavcsed.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_KtQjYkIjmUqq-1Wtxa0iSg_fwWo4Cbb';
+  const TABLE = 'metrics';
+
+  // ─── Neon colors ───
+  const NEON = {
+    cyan: '#00F0FF',
+    pink: '#FF3CAC',
+    green: '#22D65A',
+    yellow: '#FFE03D',
+    purple: '#845EF7',
+  };
+
+  const DATASET_COLORS = {
+    db: NEON.cyan,
+    mip360: NEON.pink,
+    nerf_synthetic: NEON.green,
+    tandt: NEON.yellow,
+  };
+
+  const ITERATION_COLORS = {
+    7000: NEON.cyan,
+    30000: NEON.purple,
+  };
+
+  // ─── State ───
+  let allData = [];
+  let selectedDatasets = new Set();
+  let selectedIterations = new Set();
+  let selectedMetric = 'psnr';
+  let charts = {};
+
+  // ─── Theme awareness ───
+  function getThemeColors() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return {
+      text: isDark ? '#E8E6E3' : '#1A1A1A',
+      secondary: isDark ? '#9B9A97' : '#5C5C5C',
+      muted: isDark ? '#6B6A68' : '#8C8C8C',
+      grid: isDark ? '#2A2A2E' : '#E2E0DB',
+      surface: isDark ? '#1A1A1D' : '#FFFFFF',
+    };
+  }
+
+  // ─── Fetch data ───
+  async function fetchData() {
+    const res = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}?select=*&order=dataset,scene,iteration`, {
+      headers: {
+        'apikey': SUPABASE_KEY,
+        'Authorization': `Bearer ${SUPABASE_KEY}`,
+      },
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+    return res.json();
+  }
+
+  // ─── Filter helpers ───
+  function filteredData() {
+    return allData.filter(d =>
+      selectedDatasets.has(d.dataset) && selectedIterations.has(d.iteration)
+    );
+  }
+
+  // ─── Build filter pills ───
+  function buildFilters() {
+    const datasets = [...new Set(allData.map(d => d.dataset))].sort();
+    const iterations = [...new Set(allData.map(d => d.iteration))].sort((a, b) => a - b);
+
+    datasets.forEach(ds => selectedDatasets.add(ds));
+    iterations.forEach(it => selectedIterations.add(it));
+
+    const dsContainer = document.getElementById('dataset-filters');
+    datasets.forEach(ds => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-pill active font-outfit';
+      btn.textContent = ds;
+      btn.dataset.value = ds;
+      btn.style.setProperty('--pill-color', DATASET_COLORS[ds] || NEON.cyan);
+      btn.addEventListener('click', () => {
+        if (selectedDatasets.has(ds)) {
+          if (selectedDatasets.size > 1) {
+            selectedDatasets.delete(ds);
+            btn.classList.remove('active');
+          }
+        } else {
+          selectedDatasets.add(ds);
+          btn.classList.add('active');
+        }
+        updateAll();
+      });
+      dsContainer.appendChild(btn);
+    });
+
+    const itContainer = document.getElementById('iteration-filters');
+    iterations.forEach(it => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-pill active font-outfit';
+      btn.textContent = it.toLocaleString();
+      btn.dataset.value = it;
+      btn.style.setProperty('--pill-color', ITERATION_COLORS[it] || NEON.cyan);
+      btn.addEventListener('click', () => {
+        if (selectedIterations.has(it)) {
+          if (selectedIterations.size > 1) {
+            selectedIterations.delete(it);
+            btn.classList.remove('active');
+          }
+        } else {
+          selectedIterations.add(it);
+          btn.classList.add('active');
+        }
+        updateAll();
+      });
+      itContainer.appendChild(btn);
+    });
+
+    const metrics = [
+      { key: 'psnr', label: 'PSNR' },
+      { key: 'ssim', label: 'SSIM' },
+      { key: 'lpips', label: 'LPIPS' },
+    ];
+    const metricContainer = document.getElementById('metric-selector');
+    metrics.forEach(m => {
+      const btn = document.createElement('button');
+      btn.className = 'filter-pill font-outfit' + (m.key === selectedMetric ? ' active' : '');
+      btn.textContent = m.label;
+      btn.dataset.value = m.key;
+      btn.style.setProperty('--pill-color', NEON.cyan);
+      btn.addEventListener('click', () => {
+        selectedMetric = m.key;
+        metricContainer.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        updateAll();
+      });
+      metricContainer.appendChild(btn);
+    });
+  }
+
+  // ─── Update summary stats ───
+  function updateStats() {
+    const data = filteredData();
+    const scenes = new Set(data.map(d => `${d.dataset}/${d.scene}`));
+    const avgPsnr = data.length ? (data.reduce((s, d) => s + d.psnr, 0) / data.length) : 0;
+    const avgSsim = data.length ? (data.reduce((s, d) => s + d.ssim, 0) / data.length) : 0;
+    const avgLpips = data.length ? (data.reduce((s, d) => s + d.lpips, 0) / data.length) : 0;
+
+    document.getElementById('stat-scenes').textContent = scenes.size;
+    document.getElementById('stat-avg-psnr').textContent = avgPsnr.toFixed(2);
+    document.getElementById('stat-avg-ssim').textContent = avgSsim.toFixed(4);
+    document.getElementById('stat-avg-lpips').textContent = avgLpips.toFixed(4);
+  }
+
+  // ─── Chart defaults ───
+  function chartDefaults() {
+    const tc = getThemeColors();
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          labels: {
+            color: tc.secondary,
+            font: { family: "'Outfit', sans-serif", size: 11 },
+            boxWidth: 12,
+            padding: 16,
+          },
+        },
+        tooltip: {
+          backgroundColor: tc.surface,
+          titleColor: tc.text,
+          bodyColor: tc.secondary,
+          borderColor: tc.grid,
+          borderWidth: 1,
+          titleFont: { family: "'Outfit', sans-serif", size: 12, weight: 500 },
+          bodyFont: { family: "'IBM Plex Mono', monospace", size: 11 },
+          padding: 12,
+          cornerRadius: 6,
+        },
+      },
+      scales: {
+        x: {
+          ticks: { color: tc.muted, font: { family: "'IBM Plex Mono', monospace", size: 10 } },
+          grid: { color: tc.grid + '40' },
+        },
+        y: {
+          ticks: { color: tc.muted, font: { family: "'IBM Plex Mono', monospace", size: 10 } },
+          grid: { color: tc.grid + '40' },
+        },
+      },
+    };
+  }
+
+  // ─── 1. Metric by Scene bar chart ───
+  function updateMetricByScene() {
+    const data = filteredData();
+    const scenes = [...new Set(data.map(d => `${d.dataset}/${d.scene}`))].sort();
+    const iterations = [...selectedIterations].sort((a, b) => a - b);
+
+    const datasets = iterations.map(it => ({
+      label: `Iter ${it.toLocaleString()}`,
+      data: scenes.map(s => {
+        const [ds, sc] = s.split('/');
+        const row = data.find(d => d.dataset === ds && d.scene === sc && d.iteration === it);
+        return row ? row[selectedMetric] : null;
+      }),
+      backgroundColor: (ITERATION_COLORS[it] || NEON.cyan) + '80',
+      borderColor: ITERATION_COLORS[it] || NEON.cyan,
+      borderWidth: 1,
+      borderRadius: 3,
+    }));
+
+    const tc = getThemeColors();
+    const metricLabels = { psnr: 'PSNR (dB)', ssim: 'SSIM', lpips: 'LPIPS' };
+
+    if (charts.metricByScene) charts.metricByScene.destroy();
+    charts.metricByScene = new Chart(document.getElementById('chart-metric-by-scene'), {
+      type: 'bar',
+      data: { labels: scenes.map(s => s.split('/')[1]), datasets },
+      options: {
+        ...chartDefaults(),
+        plugins: {
+          ...chartDefaults().plugins,
+          title: { display: false },
+        },
+        scales: {
+          ...chartDefaults().scales,
+          x: {
+            ...chartDefaults().scales.x,
+            ticks: {
+              ...chartDefaults().scales.x.ticks,
+              maxRotation: 45,
+            },
+          },
+          y: {
+            ...chartDefaults().scales.y,
+            title: {
+              display: true,
+              text: metricLabels[selectedMetric] || selectedMetric.toUpperCase(),
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ─── 2. Quality vs Render Time scatter ───
+  function updateQualityVsTime() {
+    const data = filteredData();
+    const datasets = [...selectedDatasets].map(ds => ({
+      label: ds,
+      data: data.filter(d => d.dataset === ds).map(d => ({
+        x: d.time_per_image,
+        y: d.psnr,
+        scene: d.scene,
+        iteration: d.iteration,
+      })),
+      backgroundColor: (DATASET_COLORS[ds] || NEON.cyan) + 'AA',
+      borderColor: DATASET_COLORS[ds] || NEON.cyan,
+      borderWidth: 1,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+    }));
+
+    const tc = getThemeColors();
+    if (charts.qualityVsTime) charts.qualityVsTime.destroy();
+    charts.qualityVsTime = new Chart(document.getElementById('chart-quality-vs-time'), {
+      type: 'scatter',
+      data: { datasets },
+      options: {
+        ...chartDefaults(),
+        plugins: {
+          ...chartDefaults().plugins,
+          tooltip: {
+            ...chartDefaults().plugins.tooltip,
+            callbacks: {
+              label: ctx => {
+                const p = ctx.raw;
+                return `${p.scene} (${p.iteration/1000}k): PSNR ${p.y.toFixed(2)}, ${p.x.toFixed(3)}s`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            ...chartDefaults().scales.x,
+            title: {
+              display: true,
+              text: 'Time per Image (s)',
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+          },
+          y: {
+            ...chartDefaults().scales.y,
+            title: {
+              display: true,
+              text: 'PSNR (dB)',
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ─── 3. Gaussians vs Quality scatter ───
+  function updateGaussiansVsQuality() {
+    const data = filteredData();
+    const datasets = [...selectedDatasets].map(ds => ({
+      label: ds,
+      data: data.filter(d => d.dataset === ds).map(d => ({
+        x: d.num_gaussians,
+        y: d.psnr,
+        scene: d.scene,
+        iteration: d.iteration,
+      })),
+      backgroundColor: (DATASET_COLORS[ds] || NEON.cyan) + 'AA',
+      borderColor: DATASET_COLORS[ds] || NEON.cyan,
+      borderWidth: 1,
+      pointRadius: 5,
+      pointHoverRadius: 8,
+    }));
+
+    const tc = getThemeColors();
+    if (charts.gaussiansVsQuality) charts.gaussiansVsQuality.destroy();
+    charts.gaussiansVsQuality = new Chart(document.getElementById('chart-gaussians-vs-quality'), {
+      type: 'scatter',
+      data: { datasets },
+      options: {
+        ...chartDefaults(),
+        plugins: {
+          ...chartDefaults().plugins,
+          tooltip: {
+            ...chartDefaults().plugins.tooltip,
+            callbacks: {
+              label: ctx => {
+                const p = ctx.raw;
+                return `${p.scene} (${p.iteration/1000}k): PSNR ${p.y.toFixed(2)}, ${(p.x/1000).toFixed(0)}k gaussians`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            ...chartDefaults().scales.x,
+            title: {
+              display: true,
+              text: 'Number of Gaussians',
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+            ticks: {
+              ...chartDefaults().scales.x.ticks,
+              callback: v => (v / 1000000).toFixed(1) + 'M',
+            },
+          },
+          y: {
+            ...chartDefaults().scales.y,
+            title: {
+              display: true,
+              text: 'PSNR (dB)',
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ─── 4. Iteration improvement ───
+  function updateIterationImprovement() {
+    const data = allData.filter(d => selectedDatasets.has(d.dataset));
+    const scenes7k = data.filter(d => d.iteration === 7000);
+    const scenes30k = data.filter(d => d.iteration === 30000);
+
+    const pairs = [];
+    scenes7k.forEach(s7 => {
+      const s30 = scenes30k.find(s => s.dataset === s7.dataset && s.scene === s7.scene);
+      if (s30) {
+        pairs.push({
+          label: `${s7.dataset}/${s7.scene}`,
+          dataset: s7.dataset,
+          gain: s30.psnr - s7.psnr,
+          from: s7.psnr,
+          to: s30.psnr,
+        });
+      }
+    });
+    pairs.sort((a, b) => b.gain - a.gain);
+
+    const tc = getThemeColors();
+    if (charts.iterImprovement) charts.iterImprovement.destroy();
+    charts.iterImprovement = new Chart(document.getElementById('chart-iteration-improvement'), {
+      type: 'bar',
+      data: {
+        labels: pairs.map(p => p.label.split('/')[1]),
+        datasets: [{
+          label: 'PSNR Gain (dB)',
+          data: pairs.map(p => p.gain),
+          backgroundColor: pairs.map(p => (DATASET_COLORS[p.dataset] || NEON.cyan) + '80'),
+          borderColor: pairs.map(p => DATASET_COLORS[p.dataset] || NEON.cyan),
+          borderWidth: 1,
+          borderRadius: 3,
+        }],
+      },
+      options: {
+        ...chartDefaults(),
+        indexAxis: 'y',
+        plugins: {
+          ...chartDefaults().plugins,
+          tooltip: {
+            ...chartDefaults().plugins.tooltip,
+            callbacks: {
+              label: ctx => {
+                const p = pairs[ctx.dataIndex];
+                return `+${p.gain.toFixed(2)} dB (${p.from.toFixed(1)} → ${p.to.toFixed(1)})`;
+              },
+            },
+          },
+        },
+        scales: {
+          x: {
+            ...chartDefaults().scales.x,
+            title: {
+              display: true,
+              text: 'PSNR Gain (dB)',
+              color: tc.muted,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+          },
+          y: {
+            ...chartDefaults().scales.y,
+            ticks: {
+              ...chartDefaults().scales.y.ticks,
+              font: { family: "'IBM Plex Mono', monospace", size: 10 },
+            },
+          },
+        },
+      },
+    });
+  }
+
+  // ─── 5. Dataset comparison radar ───
+  function updateDatasetRadar() {
+    const datasets = [...selectedDatasets];
+    // For each dataset, get best iteration (30k if available, else 7k) per scene, then average
+    const datasetAvgs = datasets.map(ds => {
+      const dsData = allData.filter(d => d.dataset === ds);
+      const scenes = [...new Set(dsData.map(d => d.scene))];
+      const bestPerScene = scenes.map(sc => {
+        const entries = dsData.filter(d => d.scene === sc);
+        return entries.reduce((best, e) => e.iteration > best.iteration ? e : best, entries[0]);
+      });
+      const n = bestPerScene.length;
+      return {
+        dataset: ds,
+        psnr: bestPerScene.reduce((s, d) => s + d.psnr, 0) / n,
+        ssim: bestPerScene.reduce((s, d) => s + d.ssim, 0) / n,
+        lpips: bestPerScene.reduce((s, d) => s + d.lpips, 0) / n,
+        speed: bestPerScene.reduce((s, d) => s + (1 / d.time_per_image), 0) / n, // images/sec
+      };
+    });
+
+    // Normalize to 0-1 range for radar
+    const maxPsnr = Math.max(...datasetAvgs.map(d => d.psnr));
+    const maxSsim = 1;
+    const maxSpeed = Math.max(...datasetAvgs.map(d => d.speed));
+
+    const tc = getThemeColors();
+    if (charts.datasetRadar) charts.datasetRadar.destroy();
+    charts.datasetRadar = new Chart(document.getElementById('chart-dataset-radar'), {
+      type: 'radar',
+      data: {
+        labels: ['PSNR', 'SSIM', '1 - LPIPS', 'Speed'],
+        datasets: datasetAvgs.map(d => ({
+          label: d.dataset,
+          data: [
+            d.psnr / maxPsnr,
+            d.ssim / maxSsim,
+            1 - d.lpips,
+            d.speed / maxSpeed,
+          ],
+          backgroundColor: (DATASET_COLORS[d.dataset] || NEON.cyan) + '20',
+          borderColor: DATASET_COLORS[d.dataset] || NEON.cyan,
+          borderWidth: 2,
+          pointBackgroundColor: DATASET_COLORS[d.dataset] || NEON.cyan,
+          pointRadius: 3,
+        })),
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            labels: {
+              color: tc.secondary,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+              boxWidth: 12,
+              padding: 16,
+            },
+          },
+          tooltip: {
+            ...chartDefaults().plugins.tooltip,
+            callbacks: {
+              label: ctx => `${ctx.dataset.label}: ${ctx.raw.toFixed(3)}`,
+            },
+          },
+        },
+        scales: {
+          r: {
+            angleLines: { color: tc.grid + '60' },
+            grid: { color: tc.grid + '40' },
+            pointLabels: {
+              color: tc.secondary,
+              font: { family: "'Outfit', sans-serif", size: 11 },
+            },
+            ticks: {
+              color: tc.muted,
+              backdropColor: 'transparent',
+              font: { family: "'IBM Plex Mono', monospace", size: 9 },
+            },
+            suggestedMin: 0,
+            suggestedMax: 1,
+          },
+        },
+      },
+    });
+  }
+
+  // ─── Update data table ───
+  function updateTable() {
+    const data = filteredData();
+    const tbody = document.getElementById('data-table-body');
+    tbody.innerHTML = data.map(d => `
+      <tr>
+        <td class="font-mono"><span class="table-dot" style="background:${DATASET_COLORS[d.dataset] || NEON.cyan}"></span>${d.dataset}</td>
+        <td class="font-crimson">${d.scene}</td>
+        <td class="font-mono">${d.iteration.toLocaleString()}</td>
+        <td class="font-mono">${d.psnr.toFixed(2)}</td>
+        <td class="font-mono">${d.ssim.toFixed(4)}</td>
+        <td class="font-mono">${d.lpips.toFixed(4)}</td>
+        <td class="font-mono">${d.time_per_image.toFixed(3)}s</td>
+        <td class="font-mono">${(d.num_gaussians / 1000).toFixed(0)}k</td>
+      </tr>
+    `).join('');
+  }
+
+  // ─── Update all ───
+  function updateAll() {
+    updateStats();
+    updateMetricByScene();
+    updateQualityVsTime();
+    updateGaussiansVsQuality();
+    updateIterationImprovement();
+    updateDatasetRadar();
+    updateTable();
+  }
+
+  // ─── Theme observer ───
+  const observer = new MutationObserver(() => {
+    if (allData.length) updateAll();
+  });
+  observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+  // ─── Init ───
+  async function init() {
+    try {
+      allData = await fetchData();
+      document.getElementById('loading-state').style.display = 'none';
+      document.getElementById('dashboard').style.display = 'block';
+      buildFilters();
+      updateAll();
+    } catch (err) {
+      document.getElementById('loading-state').style.display = 'none';
+      document.getElementById('error-state').style.display = 'flex';
+      document.getElementById('error-message').textContent = `Failed to load data: ${err.message}`;
+      console.error('Supabase fetch error:', err);
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+<style>
+  .page-title {
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  .page-subtitle {
+    font-size: 15.5px;
+    color: var(--secondary);
+    line-height: 1.65;
+    margin-bottom: 32px;
+    max-width: 520px;
+  }
+
+  /* Loading / Error */
+  .loading-state {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 40px 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-top-color: #00F0FF;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+
+  .error-state {
+    align-items: center;
+    gap: 8px;
+    padding: 24px;
+    background: #FF3CAC15;
+    border: 1px solid #FF3CAC30;
+    border-radius: 8px;
+    color: #FF3CAC;
+    font-size: 13px;
+  }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    margin-bottom: 32px;
+    padding: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .control-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .control-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .filter-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .filter-pill {
+    font-size: 12px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Outfit', sans-serif;
+  }
+
+  .filter-pill:hover {
+    border-color: var(--secondary);
+    color: var(--secondary);
+  }
+
+  .filter-pill.active {
+    background: color-mix(in srgb, var(--pill-color, #00F0FF) 12%, transparent);
+    color: var(--pill-color, #00F0FF);
+    border-color: color-mix(in srgb, var(--pill-color, #00F0FF) 30%, transparent);
+  }
+
+  /* Stats row */
+  .stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .stat-label {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Charts */
+  .chart-container {
+    margin-bottom: 36px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .neon-dot {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .chart-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+    line-height: 1.5;
+  }
+
+  .chart-wrapper {
+    position: relative;
+    height: 340px;
+  }
+
+  .chart-square {
+    height: 360px;
+  }
+
+  .chart-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  /* Table */
+  .table-section {
+    margin-bottom: 36px;
+    padding: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+  }
+
+  .table-wrapper {
+    overflow-x: auto;
+    margin-top: 16px;
+  }
+
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .data-table th {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    color: var(--secondary);
+  }
+
+  .data-table tr:hover td {
+    background: var(--surface-hover);
+  }
+
+  .table-dot {
+    display: inline-block;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .stats-row {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chart-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .controls {
+      gap: 16px;
+      padding: 16px;
+    }
+
+    .chart-wrapper {
+      height: 280px;
+    }
+  }
+</style>
